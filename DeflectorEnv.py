@@ -8,7 +8,7 @@ import matlab.engine
 class CustomEnv(gym.Env): 
     
     #initialization
-    def __init__(self, n_cells, wavelength=900, desired_angle=60):
+    def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
         
