@@ -11,7 +11,9 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength=900, desired_angle=60):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'C:\Users\user\DongjinSeo\RETICOLO V8\reticolo_allege'));
+        
+        self.path = ''
+        self.eng.addpath(self.eng.genpath(r self.path));
         self.eng.addpath(self.eng.genpath('solvers'));
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
