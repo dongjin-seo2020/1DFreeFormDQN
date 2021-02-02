@@ -8,3 +8,6 @@ FC: learns the correlation of inputs and infers the maximum Q action (stabilized
 
 ## original code condition
 deflection angle 60 degree / wavelength 900nm (from [Fan group sample inference case](https://github.com/jonfanlab/GLOnet))
+
+## simulation
+The simulation which corresponds to environment runs on MATLAB RCWA open source [Reticolo](https://zenodo.org/record/3610175#.YBkECS2UGX0)
