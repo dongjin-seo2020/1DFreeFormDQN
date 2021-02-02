@@ -57,7 +57,7 @@ class CustomEnv(gym.Env):
         return self.struct.squeeze(), eff_init
     
     def get_obs(self):
-        return tuple(self.struct)  #
+        return tuple(self.struct) 
         
     def render(self, mode= 'human', close = False):
         plt.plot(self.struct)
