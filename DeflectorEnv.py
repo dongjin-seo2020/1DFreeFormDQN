@@ -26,13 +26,13 @@ class CustomEnv(gym.Env):
     
     def step(self, action): #array: input vector, ndarray
         done = False
-        #efficiency를 리턴받아 result_before에 할당
+        #return efficiency and assign it to result_before
         result_before = self.getEffofStructure(matlab.double(self.struct.tolist()), self.wavelength, \
                                           self.desired_angle)
         struct_after= self.struct.copy()
         if action==self.n_cells:
             done=True
-        elif (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
+        elif (struct_after[action] == 1): #if +1, change to -1, vice versa.
             struct_after[action] = -1
         elif(struct_after[action] == -1):
             struct_after[action] = 1
@@ -40,12 +40,11 @@ class CustomEnv(gym.Env):
             raise ValueError('struct component should be 1 or -1')
         result_after = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
                                          self.desired_angle)
-        #reward = result_after - result_before
         
-        reward = (result_after)**3
         
-        #reward = 1-(1-result_after)**3
-        observation = result_after ##check!
+        #various reward can be set
+        reward = (result_after)**3.   #reward = result_after - result_before
+        observation = result_after
              
         self.struct = struct_after.copy()
         return struct_after.squeeze(), observation, reward, done
