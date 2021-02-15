@@ -1,4 +1,4 @@
-# 1DFreeFromDQN
+# 1DFreeFormDQN
 Design code of 1D free-from deflector metasurface
 
 ## target condition
