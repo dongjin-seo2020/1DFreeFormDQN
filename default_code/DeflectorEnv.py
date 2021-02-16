@@ -43,7 +43,8 @@ class CustomEnv(gym.Env):
         
         
         #various reward can be set
-        reward = (result_after)**3.   #reward = result_after - result_before
+        reward = (result_after)**3.   
+        #reward = result_after - result_before
         observation = result_after
              
         self.struct = struct_after.copy()
