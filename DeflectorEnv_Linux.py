@@ -1,32 +1,25 @@
-#############################################################################
-################# 2D deflector with Gaussian Approximation ##################
-########################### Author : Dongjin Seo ############################
-#############################################################################
-
 import gym
 import numpy as np
 import matplotlib.pyplot as plt
-import matlab.engine
-
+import subprocess
 
 
 class CustomEnv(gym.Env): 
     
     #initialization
-    def __init__(self, n_cells, wavelength=900, desired_angle=60):
+    def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
-        self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'C:\Users\user\DongjinSeo\RETICOLO V8\reticolo_allege'));
-        self.eng.addpath(self.eng.genpath('solvers'));
         self.n_cells = n_cells
-        self.wavelength = matlab.double([wavelength])
-        self.desired_angle = matlab.double([desired_angle])
+        self.wavelength = wavelength
+        self.desired_angle = desired_angle
         self.struct = np.ones(self.n_cells)
-        self.eff = 0
     
     def getEffofStructure(self, struct, wavelength, desired_angle):
-        effs = self.eng.Eval_Eff_1D(struct, wavelength, desired_angle)
-        return effs
+
+
+        #/usr/local/MATLAB/MATLAB_Runtime/v98 
+        effs = subprocess.run(["run_Eval_Eff_1D.sh"],struct, int(wavelength), int(desired_angle))
+        return effs 
     
     def step(self, action): #array: input vector, ndarray
         done = False
