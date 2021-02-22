@@ -1,3 +1,8 @@
+import gym
+from DeflectorEnv import CustomEnv
+import matplotlib.pyplot as plt
+
+
 
 episode_num = 10
 cell_num = 64
