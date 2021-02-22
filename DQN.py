@@ -7,21 +7,22 @@ import matplotlib
 import matplotlib.pyplot as plt
 import collections
 from collections import namedtuple
-#from itertools import count
 
 import shelve
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
-#import torchvision.transforms as T
-
-#Tensorboard
-#import tensorflow as tf
 import datetime
-#import tensorflow
 import os
 
+
+#Tensorboard
+import tensorflow as tf
+
+
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter('runs') 
 
 ################################################################################
 
@@ -180,6 +181,8 @@ def main():
             s = s_prime
             eff_epi_st[t] = eff_next
             score += r
+            
+            writer.add_scalar('episode'+str(episode_length), eff_next, t)
             
             epi_length = t+1
             if done:
