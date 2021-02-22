@@ -19,13 +19,12 @@ import torch.nn.functional as F
 #Tensorboard
 #import tensorflow as tf
 import datetime
-import tensorflow
+#import tensorflow
 import os
 
 
+################################################################################
 
-
-###############################################
 SummaryWriterName = '64_900_80'
 device_name = os.getcwd() + '/devices/epi{}.png'
 np_name = os.getcwd() + '/np_save/epi{}.npy'
@@ -34,27 +33,27 @@ PATH = os.getcwd()+'\\'+'model'+'\\'
 q_net_name = PATH+'\\'+'q'
 q_target_net_name = PATH+'\\'+'q_target'
 
+################################################################################
 
-
-
-###############################################
 #Hyperparameters
 learning_rate = 0.001 # 0.0001로 줄이기?
-gamma         = 0.9 #0.98
+gamma         = 0.99 #0.98
 buffer_limit  = 10000000  #### 늘려야함!!!!!!!!!!!!!!!!   ####
 batch_size    = 32
 n_cells = 64
-tau = 0.005
+tau = 1
 episode_length =64
-EpisodeNumber = 40000
-print_interval = 50
-n_epi_decreasing_period = 1000
+EpisodeNumber = 200000
+print_interval = 100
+n_epi_decreasing_period = 2500
 train_start_memory_size = 5000
-train_number =5
+train_number =1
+train_frequency = 2
+target_update_frequency = 1000
 
 
+################################################################################
 
-###############################################
 class ReplayBuffer():
     def __init__(self):
         self.buffer = collections.deque(maxlen=buffer_limit)
@@ -92,8 +91,12 @@ class Qnet(nn.Module):
         self.fc1 = nn.Linear(n_cells, 2*n_cells)
         #self.fc2 = nn.Linear(2*n_cells, 4*n_cells)
         #self.fc3 =nn.Linear(4*n_cells, 2*n_cells)
-        self.fc2 = nn.Linear(2*n_cells, n_cells+1)  ########################
+        self.fc2 = nn.Linear(2*n_cells, 2*n_cells)
+        self.fc3 = nn.Linear(2*n_cells, n_cells+1)  ########################
         self.m = nn.LeakyReLU(0.1)
+        
+        
+        #### leakyReLU -> tanh?
         
     def forward(self, x):
         #print('1: ', x.shape)
@@ -101,12 +104,8 @@ class Qnet(nn.Module):
         
         
         x = self.m(self.fc1(x))
-        #x = self.md(x)
-        #print(x.shape)
-        #x.unsqueeze(0)
-        #print(x.shape)
-        #print(x.shape)
-        x = self.fc2(x)
+        x = self.m(self.fc2(x))
+        x = self.fc3(x)
         
         return x
       
@@ -123,14 +122,12 @@ class Qnet(nn.Module):
 
         
 def merge_network_weights(q_target_state_dict, q_state_dict):
-    TAU = 0.1
+    TAU = tau
     dicts = {}
     for k,v in q_target_state_dict.items():
         dicts[k] = q_target_state_dict[k]*(1-TAU)+q_state_dict[k]*(TAU)
     return dicts
    
-
-
 
         
 def train(q, q_target, memory, optimizer):
@@ -164,6 +161,8 @@ def main():
     epi_len_st= []
     count =0
     
+    nstep =0
+    
     for n_epi in range(EpisodeNumber):
         epsilon = max(0.01, 0.9 - 0.1*(n_epi/n_epi_decreasing_period))#
         s, eff_init = env.reset()
@@ -172,6 +171,7 @@ def main():
         epi_length = 0
         
         for t in range(episode_length):
+            nstep += 1
             q.eval()
             a = q.sample_action(torch.from_numpy(s).float(), epsilon)
             s_prime, eff_next, r, done = env.step(a)
@@ -186,20 +186,16 @@ def main():
                 break
 
             
-        if memory.size()>train_start_memory_size:
-            q.train()
-            q_target.train()
-            train(q, q_target, memory, optimizer)
+            if memory.size()>train_start_memory_size and nstep%train_frequency==0 : 
+                q.train()
+                q_target.train()
+                train(q, q_target, memory, optimizer)
+            if nstep%target_update_frequency ==0:
+                merged_dict = merge_network_weights(q_target.state_dict(),q.state_dict())
+                q_target.load_state_dict(merged_dict)
 
         if n_epi%print_interval==0 and n_epi!=0:
-            merged_dict = merge_network_weights(q_target.state_dict(),q.state_dict())
-            q_target.load_state_dict(merged_dict)
-            #writer.add_scalar('score',
-            #                score/print_interval,
-            #                n_epi)
-        ########
-        ########구조 plot해서 저장하는 코드 - 20마다 하면 될듯?
-        #writer.add_image('fig '+str(n_epi), plt.plot(s), 0)
+            
             q.score_sum.append(score)
             #q.score_init_final.append(eff_next-eff_init)
             q.effdata.append(eff_next)
