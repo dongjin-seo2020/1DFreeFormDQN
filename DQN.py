@@ -1,5 +1,5 @@
 import gym
-from DeflectorEnv import CustomEnv
+from DeflectorEnv_S4 import CustomEnv
 import math
 import random
 import numpy as np
