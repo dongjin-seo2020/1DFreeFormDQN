@@ -23,12 +23,13 @@ class CustomEnv(gym.Env):
         self.desired_angle = int(desired_angle)
         self.struct = np.ones(self.n_cells)
         self.Nx = np.size(self.struct)
+        self.eff = 0
 
         self.S.SetMaterial(Name = 'Si', Epsilon = 3.635**2)
         self.S.SetMaterial(Name = 'glass', Epsilon = 1.45**2)
         self.S.SetMaterial(Name = 'air', Epsilon = 1**2)
         self.S.AddLayer(Name = 'glass', Thickness= 0, Material='glass')
-        self.S.AddLayer(Name = 'grating', Thickness= thick0, Material='air')
+        self.S.AddLayer(Name = 'grating', Thickness= self.thick0, Material='air')
         self.S.AddLayer(Name = 'air', Thickness=0, Material='air')
 
         self.S.SetOptions(
@@ -58,8 +59,8 @@ class CustomEnv(gym.Env):
             Order = 0
         )
         self.S.SetFrequency(self.freq)
-        (fi, bi) = S.GetPoyntingFlux(Layer = 'glass')
-        (fo, bo) = S.GetPoyntingFlux(Layer = 'air')
+        (fi, bi) = self.S.GetPoyntingFlux(Layer = 'glass')
+        (fo, bo) = self.S.GetPoyntingFlux(Layer = 'air')
         
         effs = np.real(fo/fi) 
         return effs
@@ -77,7 +78,7 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
+        self.eff = self.getEffofStructure(self.struct, self.wavelength,\
                                          self.desired_angle)
         #reward = result_after - result_before
         
@@ -92,7 +93,7 @@ class CustomEnv(gym.Env):
         
     def reset(self): #initializing the env
         self.struct = np.ones(self.n_cells) 
-        eff_init = self.getEffofStructure(matlab.double(self.struct.tolist()), self.wavelength, \
+        eff_init = self.getEffofStructure(self.struct, self.wavelength, \
                                           self.desired_angle)
         self.done = False
         return self.struct.squeeze(), eff_init
