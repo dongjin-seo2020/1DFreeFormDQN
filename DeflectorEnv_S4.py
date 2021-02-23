@@ -33,7 +33,7 @@ class CustomEnv(gym.Env):
         self.struct = self.struct/2 + 0.5
         for i in range(np.size(img)):
             if img[i]==1:
-                S.SetRegionRectangle(
+                self.S.SetRegionRectangle(
                     Layer = 'grating',
                     Material = 'Si',
                     Center = (-period/2+period/(2*Nx) + i*(period/Nx), 0),
