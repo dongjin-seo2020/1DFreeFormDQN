@@ -9,16 +9,17 @@ class CustomEnv(gym.Env):
     
     #initialization
     def __init__(self, n_cells, wavelength, desired_angle):
+        
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        
-        self.path = ''
+        self.path = '~'
         self.eng.addpath(self.eng.genpath(r self.path));
         self.eng.addpath(self.eng.genpath('solvers'));
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
         self.desired_angle = matlab.double([desired_angle])
         self.struct = np.ones(self.n_cells)
+        self.eff =0
     
     def getEffofStructure(self, struct, wavelength, desired_angle):
         effs = self.eng.Eval_Eff_1D(struct, wavelength, desired_angle)
