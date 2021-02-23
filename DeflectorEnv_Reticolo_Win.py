@@ -42,21 +42,15 @@ class CustomEnv(gym.Env):
         #reward = result_after - result_before
         
         reward = 4*(self.eff-result_before)
-        
+        #various reward can be set
+        #reward = (result_after)**3.   
+        #reward = result_after - result_before
         #reward = 1-(1-result_after)**3
              
         self.struct = struct_after.copy()
         
         return struct_after.squeeze(), self.eff, reward, done
         
-        
-        #various reward can be set
-        reward = (result_after)**3.   
-        #reward = result_after - result_before
-        observation = result_after
-             
-        self.struct = struct_after.copy()
-        return struct_after.squeeze(), observation, reward, done
         
     def reset(self): #initializing the env
         self.struct = np.ones(self.n_cells) 
