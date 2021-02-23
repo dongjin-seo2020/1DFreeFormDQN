@@ -17,12 +17,13 @@ import torch.nn.functional as F
 import datetime
 import os
 
+''' Temporarily off
 #Tensorboard
 import tensorflow as tf
 
-
 from torch.utils.tensorboard import SummaryWriter
 writer = SummaryWriter('runs')
+'''
 
 ################################################################################
 
@@ -52,6 +53,8 @@ train_start_memory_size = 5000
 train_number = 1
 train_step = 2
 merge_step = train_step * 10000
+###############################################
+
 
 class ReplayBuffer():
     def __init__(self):
@@ -150,7 +153,9 @@ def train(q, q_target, memory, optimizer):
 
 def main():
 #     env = gym.make('Deflector-v0')
-    env = CustomEnv(n_cells)
+    wavelength = 900
+    angle = 70
+    env = CustomEnv(n_cells, wavelength, angle)
     q = Qnet()
     q_target = Qnet()
     q_target.load_state_dict(q.state_dict())
