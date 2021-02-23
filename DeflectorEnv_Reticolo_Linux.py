@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import subprocess
 
 
-class CustomEnv(gym.Env): 
-    
+class CustomEnv(gym.Env):
+
     #initialization
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
@@ -13,14 +13,14 @@ class CustomEnv(gym.Env):
         self.wavelength = wavelength
         self.desired_angle = desired_angle
         self.struct = np.ones(self.n_cells)
-    
+
     def getEffofStructure(self, struct, wavelength, desired_angle):
 
 
-        #/usr/local/MATLAB/MATLAB_Runtime/v98 
+        #/usr/local/MATLAB/MATLAB_Runtime/v98
         effs = subprocess.run(["run_Eval_Eff_1D.sh"],struct, int(wavelength), int(desired_angle))
-        return effs 
-    
+        return effs
+
     def step(self, action): #array: input vector, ndarray
         done = False
         #efficiency를 리턴받아 result_before에 할당
@@ -37,26 +37,26 @@ class CustomEnv(gym.Env):
         self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
                                          self.desired_angle)
         #reward = result_after - result_before
-        
+
         reward = 4*(self.eff-result_before)
-        
+
         #reward = 1-(1-result_after)**3
-             
+
         self.struct = struct_after.copy()
-        
+
         return struct_after.squeeze(), self.eff, reward, done
-        
+
     def reset(self): #initializing the env
-        self.struct = np.ones(self.n_cells) 
+        self.struct = np.ones(self.n_cells)
         eff_init = self.getEffofStructure(matlab.double(self.struct.tolist()), self.wavelength, \
                                           self.desired_angle)
         self.done = False
         return self.struct.squeeze(), eff_init
-    
+
     def get_obs(self):
         return tuple(self.struct)  #
-        
+
     def render(self, mode= 'human', close = False):
         plt.plot(self.struct)
 
-        
+
