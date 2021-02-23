@@ -11,11 +11,19 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength, desired_angle):
         
         super(CustomEnv, self).__init__()
-        self.S = S4.New(Lattice=((period,0),(0,0)), NumBasis=nG)
+        self.thick0 = 325
+        self.wavelength = 900
+        self.angle = 70
+        self.nG = 40 
+        self.period = abs(self.wavelength/np.sin(self.angle/180*np.pi))
+        self.freq = 1/self.wavelength
+        self.S = S4.New(Lattice=((self.period,0),(0,0)), NumBasis=self.nG)
         self.n_cells = n_cells
         self.wavelength = int(wavelength)
         self.desired_angle = int(desired_angle)
         self.struct = np.ones(self.n_cells)
+        self.Nx = np.size(self.struct)
+
         self.S.SetMaterial(Name = 'Si', Epsilon = 3.635**2)
         self.S.SetMaterial(Name = 'glass', Epsilon = 1.45**2)
         self.S.SetMaterial(Name = 'air', Epsilon = 1**2)
@@ -31,14 +39,14 @@ class CustomEnv(gym.Env):
     def getEffofStructure(self, struct, wavelength, desired_angle):
         
         self.struct = self.struct/2 + 0.5
-        for i in range(np.size(img)):
-            if img[i]==1:
+        for i in range(np.size(self.struct)):
+            if self.struct[i]==1:
                 self.S.SetRegionRectangle(
                     Layer = 'grating',
                     Material = 'Si',
-                    Center = (-period/2+period/(2*Nx) + i*(period/Nx), 0),
+                    Center = (-self.period/2+self.period/(2*self.Nx) + i*(self.period/self.Nx), 0),
                     Angle = 0,
-                    Halfwidths = (period/(2*Nx), 0)
+                    Halfwidths = (self.period/(2*self.Nx), 0)
                     )
         self.S.SetExcitationPlanewave(
             IncidenceAngles=(
@@ -49,7 +57,7 @@ class CustomEnv(gym.Env):
             pAmplitude = 1,
             Order = 0
         )
-        self.S.SetFrequency(freq)
+        self.S.SetFrequency(self.freq)
         (fi, bi) = S.GetPoyntingFlux(Layer = 'glass')
         (fo, bo) = S.GetPoyntingFlux(Layer = 'air')
         
