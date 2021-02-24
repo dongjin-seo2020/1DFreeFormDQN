@@ -9,27 +9,17 @@ class CustomEnv(gym.Env):
 
     #initialization
     def __init__(self, n_cells, wavelength, desired_angle):
-        
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-<<<<<<< HEAD:DeflectorEnv_Reticolo_Win.py
         self.path = '~'
-=======
-
-        self.path = ''
->>>>>>> adding double dqn:DeflectorEnv.py
         self.eng.addpath(self.eng.genpath(r self.path));
         self.eng.addpath(self.eng.genpath('solvers'));
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
         self.desired_angle = matlab.double([desired_angle])
         self.struct = np.ones(self.n_cells)
-<<<<<<< HEAD:DeflectorEnv_Reticolo_Win.py
         self.eff =0
-    
-=======
 
->>>>>>> adding double dqn:DeflectorEnv.py
     def getEffofStructure(self, struct, wavelength, desired_angle):
         effs = self.eng.Eval_Eff_1D(struct, wavelength, desired_angle)
         return effs
@@ -52,33 +42,15 @@ class CustomEnv(gym.Env):
         #reward = result_after - result_before
 
         reward = 4*(self.eff-result_before)
-<<<<<<< HEAD:DeflectorEnv_Reticolo_Win.py
         #various reward can be set
-        #reward = (result_after)**3.   
+        #reward = (result_after)**3.
         #reward = result_after - result_before
-=======
-
->>>>>>> adding double dqn:DeflectorEnv.py
         #reward = 1-(1-result_after)**3
 
         self.struct = struct_after.copy()
 
         return struct_after.squeeze(), self.eff, reward, done
-<<<<<<< HEAD:DeflectorEnv_Reticolo_Win.py
-        
-        
-=======
 
-
-        #various reward can be set
-        reward = (result_after)**3.
-        #reward = result_after - result_before
-        observation = result_after
-
-        self.struct = struct_after.copy()
-        return struct_after.squeeze(), observation, reward, done
-
->>>>>>> adding double dqn:DeflectorEnv.py
     def reset(self): #initializing the env
         self.struct = np.ones(self.n_cells)
         eff_init = self.getEffofStructure(matlab.double(self.struct.tolist()), self.wavelength, \
@@ -91,5 +63,3 @@ class CustomEnv(gym.Env):
 
     def render(self, mode= 'human', close = False):
         plt.plot(self.struct)
-
-
