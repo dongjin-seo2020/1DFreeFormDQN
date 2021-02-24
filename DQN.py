@@ -152,7 +152,7 @@ def train(q, q_target, memory, optimizer):
         optimizer.step()
 
 
-def main():tor-v0')
+def main():
     
     Path("np_save").mkdir(parents=True, exist_ok=True)
     Path("model").mkdir(parents=True, exist_ok=True)
