@@ -93,13 +93,14 @@ class Qnet(nn.Module):
         self.score_init_final = []
 
         self.fc1 = nn.Linear(n_cells, 2*n_cells)
-        self.fc2 = nn.Linear(2*n_cells, n_cells+1)  ########################
-        # self.m = nn.LeakyReLU(0.1)
-        self.m = nn.ReLU()
+        self.fc2 = nn.Linear(2*n_cells, 2*n_cells)
+        self.fc3 = nn.Linear(2*n_cells, n_cells+1)
+        self.m = nn.LeakyReLU(0.1)
 
     def forward(self, x):
         x = self.m(self.fc1(x))
-        x = self.fc2(x)
+        x = self.m(self.fc2(x))
+        x = self.fc3(x)
         return x
 
     def sample_action(self, obs, epsilon):
