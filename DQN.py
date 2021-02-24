@@ -156,7 +156,7 @@ def main():tor-v0')
     
     Path("np_save").mkdir(parents=True, exist_ok=True)
     Path("model").mkdir(parents=True, exist_ok=True)
-    Path("devies").mkdir(parents=True, exist_ok=True)
+    Path("devices").mkdir(parents=True, exist_ok=True)
     
     wavelength = 900
     angle = 70
