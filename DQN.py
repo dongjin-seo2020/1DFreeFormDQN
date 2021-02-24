@@ -152,8 +152,12 @@ def train(q, q_target, memory, optimizer):
         optimizer.step()
 
 
-def main():
-#     env = gym.make('Deflector-v0')
+def main():tor-v0')
+    
+    Path("np_save").mkdir(parents=True, exist_ok=True)
+    Path("model").mkdir(parents=True, exist_ok=True)
+    Path("devies").mkdir(parents=True, exist_ok=True)
+    
     wavelength = 900
     angle = 70
     env = CustomEnv(n_cells, wavelength, angle)
