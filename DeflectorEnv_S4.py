@@ -35,7 +35,15 @@ class CustomEnv(gym.Env):
         self.S.SetOptions(
             PolarizationDecomposition = True,
         )
-        
+        self.S.SetExcitationPlanewave(
+            IncidenceAngles=(
+                    0, # polar angle in [0,180)
+                    0  # azimuthal angle in [0,360)
+            ),
+            sAmplitude = 0,
+            pAmplitude = 1,
+            Order = 0
+        )
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
         
@@ -49,15 +57,7 @@ class CustomEnv(gym.Env):
                     Angle = 0,
                     Halfwidths = (self.period/(2*self.Nx), 0)
                     )
-        self.S.SetExcitationPlanewave(
-            IncidenceAngles=(
-                    0, # polar angle in [0,180)
-                    0  # azimuthal angle in [0,360)
-            ),
-            sAmplitude = 0,
-            pAmplitude = 1,
-            Order = 0
-        )
+        
         self.S.SetFrequency(self.freq)
         (fi, bi) = self.S.GetPoyntingFlux(Layer = 'glass')
         (fo, bo) = self.S.GetPoyntingFlux(Layer = 'air')
