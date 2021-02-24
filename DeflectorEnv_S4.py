@@ -44,6 +44,7 @@ class CustomEnv(gym.Env):
             pAmplitude = 1,
             Order = 0
         )
+        self.S.SetFrequency(self.freq)
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
         
@@ -58,7 +59,7 @@ class CustomEnv(gym.Env):
                     Halfwidths = (self.period/(2*self.Nx), 0)
                     )
         
-        self.S.SetFrequency(self.freq)
+        
         (fi, bi) = self.S.GetPoyntingFlux(Layer = 'glass')
         (fo, bo) = self.S.GetPoyntingFlux(Layer = 'air')
         
