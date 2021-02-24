@@ -138,7 +138,7 @@ def train(q, q_target, memory, optimizer):
         if double:
             max_a_prime = q(s_prime).argmax(1, keepdim=True)
             with torch.no_grad():
-                max_q_prime = q_target(s_primt).gather(1, max_a_prime)
+                max_q_prime = q_target(s_prime).gather(1, max_a_prime)
         else:
             with torch.no_grad():
                 max_q_prime = q_target(s_prime).max(1)[0].unsqueeze(1)
