@@ -48,8 +48,7 @@ class CustomEnv(gym.Env):
 
     def reset(self): #initializing the env
         self.struct = np.ones(self.n_cells)
-        eff_init = self.getEffofStructure(matlab.double(self.struct.tolist()), self.wavelength, \
-                                          self.desired_angle)
+        eff_init = 0
         self.done = False
         return self.struct.squeeze(), eff_init
 
