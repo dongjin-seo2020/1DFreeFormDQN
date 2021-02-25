@@ -1,0 +1,280 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="/home/jlab_dirac/바탕화면/NewFolder/Eval_Eff_1D.prj" location="/home/jlab_dirac/바탕화면/NewFolder" name="Eval_Eff_1D" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>Eval_Eff_1D</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>/Eval_Eff_1D/</param.installpath.string>
+    <param.installpath.combo>option.installpath.user</param.installpath.combo>
+    <param.logo>/home/jlab_dirac/바탕화면/super_mario_bros.0.jpg</param.logo>
+    <param.install.notes />
+    <param.target.install.notes>In the following directions, replace MR/v98 by the directory on the target machine where MATLAB is installed, or MR by the directory where the MATLAB Runtime is installed.
+
+(1) Set the environment variable XAPPLRESDIR to this value:
+
+MR/v98/X11/app-defaults
+
+
+(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the following:
+
+MR/v98/runtime/glnxa64:MR/v98/bin/glnxa64:MR/v98/sys/os/glnxa64:MR/v98/sys/opengl/lib/glnxa64
+
+If it is defined, set it to the following:
+
+${LD_LIBRARY_PATH}:MR/v98/runtime/glnxa64:MR/v98/bin/glnxa64:MR/v98/sys/os/glnxa64:MR/v98/sys/opengl/lib/glnxa64</param.target.install.notes>
+    <param.intermediate>${PROJECT_ROOT}/Eval_Eff_1D/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/Eval_Eff_1D/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/Eval_Eff_1D/for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}/Eval_Eff_1D</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	 Eval_Eff_1D -? 
+	 Eval_Eff_1D img_txt wavelength_txt angle_txt 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 img_txt wavelength_txt angle_txt  input arguments</param.help.text>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+    </unset>
+    <fileset.main>
+      <file>/home/jlab_dirac/Downloads/GLOnet-master/solvers/Eval_Eff_1D.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/@reticolo</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/res0.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/res1.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/res2.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/res3.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/ret.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/ret22op.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/ret2ep.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/ret2op.M</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/ret_laplace.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retabeles.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retantislash.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retapod.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retassocie.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retb.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retbidouille.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retblkinv.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retbloch.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retbornes.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcadilhac.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcadillac.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcal.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcao.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcaoo.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcaotest.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retchamp.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcolone.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcolonne.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcolor.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcompare.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcontour.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcouche.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcouchea.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcoupe.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcr.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retcrs.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retdb.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retdecoupe.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retdiag.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retdir.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retdisc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retds.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retecrit.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retefface.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/reteig.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retelimine.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retempile.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retener.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retep.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/reteval.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retexclusion.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retext.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retextremum.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retf.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfaisceau.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfastprod.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfig.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfind.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfont.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfp.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfpcomplexe.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfpm.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfps.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfr.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retfullsparse.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retgauss.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retgauss.mat</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retgauss_laguerre.mat</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retget.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retginput.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retgs.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retguide.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/reti.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retinc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retind2sub.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retindice.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retinit.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retintegre.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retinterp.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retinterps.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retinv.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retio.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retlorentz.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retmarges.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retmat.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retmax.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retmaystre.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retmin.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retneff.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retoc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retop.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retoptimget.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retordonne.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retperiodique.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retpermute.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retpinv.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retpl.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retpoids.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retpoynting.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retprod.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retq.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retreal.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retrecup.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retrenverse.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retreseau.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rets.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rets1.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retscale.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsimplifie.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsinc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsize.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retslash.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsmode.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsommerfeld.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsort.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsp.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsparse.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsqrt.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsqueeze.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retss.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retstr.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsub2ind.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsubplot.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsum.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retsym.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettchamp.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettestobjet.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettexte.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettf.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettic.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettmode.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettneff.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettoc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettoeplitz.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettr.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/rettronc.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retu.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retunwrap.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retutest.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retv6.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retvectoriel.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retversion.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retwhos.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retx.m</file>
+      <file>/home/jlab_dirac/Downloads/reticolo_allege/retzp.m</file>
+    </fileset.resources>
+    <fileset.package />
+    <fileset.depfun>
+      <file>/home/jlab_dirac/Downloads/GLOnet-master/solvers/p_Si.mat</file>
+      <file>/home/jlab_dirac/documents/JuhoPark/[Tunable_BIC]_RCWA_model/reticolo_allege/@reticolo/display.m</file>
+      <file>/home/jlab_dirac/documents/JuhoPark/[Tunable_BIC]_RCWA_model/reticolo_allege/@reticolo/reticolo.m</file>
+      <file>/home/jlab_dirac/documents/JuhoPark/[Tunable_BIC]_RCWA_model/reticolo_allege/@reticolo/subsref.m</file>
+      <file>/home/jlab_dirac/documents/JuhoPark/[Tunable_BIC]_RCWA_model/reticolo_allege/@reticolo/subsref7.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/Eval_Eff_1D/for_testing" name="readme.txt" optional="true">/home/jlab_dirac/바탕화면/NewFolder/Eval_Eff_1D/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/Eval_Eff_1D/for_testing" name="splash.png" optional="false">/home/jlab_dirac/바탕화면/NewFolder/Eval_Eff_1D/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/Eval_Eff_1D/for_testing" name="Eval_Eff_1D" optional="false">/home/jlab_dirac/바탕화면/NewFolder/Eval_Eff_1D/for_testing/Eval_Eff_1D</file>
+      <file location="${PROJECT_ROOT}/Eval_Eff_1D/for_testing" name="run_Eval_Eff_1D.sh" optional="false">/home/jlab_dirac/바탕화면/NewFolder/Eval_Eff_1D/for_testing/run_Eval_Eff_1D.sh</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/usr/local/MATLAB/R2020a</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>5.4.0-59-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
