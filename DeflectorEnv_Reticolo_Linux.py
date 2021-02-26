@@ -2,6 +2,12 @@ import gym
 import numpy as np
 import matplotlib.pyplot as plt
 import subprocess
+import os
+from subprocess import Popen, PIPE
+import struct as st
+
+subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/Eval_Eff_1D', shell=True)
+subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh', shell=True)
 
 
 class CustomEnv(gym.Env):
@@ -13,12 +19,14 @@ class CustomEnv(gym.Env):
         self.wavelength = wavelength
         self.desired_angle = desired_angle
         self.struct = np.ones(self.n_cells)
+        self.eff= 0
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
 
 
         #/usr/local/MATLAB/MATLAB_Runtime/v98
-        effs = subprocess.run(["run_Eval_Eff_1D.sh"],struct, int(wavelength), int(desired_angle))
+        pipe = subprocess.Popen(["./solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", str(struct), str(wavelength), str(desired_angle)], stdout=PIPE)
+        effs = pipe.communicate()[0]
         return effs
 
     def step(self, action): #array: input vector, ndarray
@@ -34,8 +42,9 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
-                                         self.desired_angle)
+        self.eff = self.getEffofStructure(struct_after, self.wavelength, self.desired_angle)
+        print(self.eff)
+        self.eff = st.unpack('f',self.eff)
         #reward = result_after - result_before
 
         reward = 4*(self.eff-result_before)
