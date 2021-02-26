@@ -79,7 +79,7 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        self.eff = self.getEffofStructure(self.struct, self.wavelength,\
+        self.eff = self.getEffofStructure(struct_after, self.wavelength,\
                                          self.desired_angle)
         #reward = result_after - result_before
         
