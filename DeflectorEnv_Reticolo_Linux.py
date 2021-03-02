@@ -22,11 +22,14 @@ class CustomEnv(gym.Env):
         self.eff= 0
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
-
-
         #/usr/local/MATLAB/MATLAB_Runtime/v98
+        
         pipe = subprocess.Popen(["./solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", str(struct), str(wavelength), str(desired_angle)], stdout=PIPE)
+        #pipe = subprocess.Popen(["./solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", struct, wavelength, desired_angle], shell=True, stdout=PIPE)
         effs = pipe.communicate()[0]
+        #print(st.calcsize(effs))
+        #effs = st.unpack('ff', effs)
+        print('effs: ', effs)
         return effs
 
     def step(self, action): #array: input vector, ndarray
@@ -43,8 +46,8 @@ class CustomEnv(gym.Env):
         else:
             raise ValueError('struct component should be 1 or -1')
         self.eff = self.getEffofStructure(struct_after, self.wavelength, self.desired_angle)
-        print(self.eff)
-        self.eff = st.unpack('f',self.eff)
+        
+        #self.eff = st.unpack('f',self.eff)
         #reward = result_after - result_before
 
         reward = 4*(self.eff-result_before)
@@ -66,5 +69,3 @@ class CustomEnv(gym.Env):
 
     def render(self, mode= 'human', close = False):
         plt.plot(self.struct)
-
-
