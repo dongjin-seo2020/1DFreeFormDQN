@@ -6,8 +6,8 @@ import os
 from subprocess import Popen, PIPE
 import struct as st
 
-subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/Eval_Eff_1D', shell=True)
-subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh', shell=True)
+subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/for_redistribution_files_only/Eval_Eff_1D', shell=True)
+subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh', shell=True)
 
 
 class CustomEnv(gym.Env):
