@@ -6,6 +6,9 @@ import os
 from subprocess import Popen, PIPE
 import struct as st
 
+import sys
+
+
 subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/for_redistribution_files_only/Eval_Eff_1D', shell=True)
 subprocess.Popen('chmod +x ' + os.getcwd()+ '/solvers/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh', shell=True)
 
@@ -23,14 +26,33 @@ class CustomEnv(gym.Env):
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
         #/usr/local/MATLAB/MATLAB_Runtime/v98
+        cmd = ["./solvers/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", str(struct), str(wavelength), str(desired_angle)]
+        p = subprocess.run(cmd)
         
-        pipe = subprocess.Popen(["./solvers/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", str(struct), str(wavelength), str(desired_angle)], stdout=PIPE)
+        
+        #pipe = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).communicate[0]
+        #proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        ##output = proc.communicate()[0]
+        #print(output)
+        #pipe = os.popen(cmd).readlines()
         #pipe = subprocess.Popen(["./solvers/Eval_Eff_1D/Eval_Eff_1D/for_redistribution_files_only/run_Eval_Eff_1D.sh", "/usr/local/MATLAB/MATLAB_Runtime/v98", struct, wavelength, desired_angle], shell=True, stdout=PIPE)
-        effs = pipe.communicate()[0]
+        #print(pipe)
+        #eff_list = pipe.communicate()[0]
+        #print('eff: ',eff_list)
+        #print('communicate: ', pipe.communicate())
+        #print('eff list: ', eff_list)
+        #print('return: ', pipe.returncode())
+        #eff_list = [int(item) for item in eff_list]
+        
+        #eff_byte = bytearray(eff_list)
+        #print(eff_byte)
+        with open('log.txt', 'r') as line:
+            eff = line.read()
+        os.remove('log.txt')
         #print(st.calcsize(effs))
         #effs = st.unpack('ff', effs)
-        print('effs: ', effs)
-        return effs
+        #print('effs: ', eff)
+        return float(eff)
 
     def step(self, action): #array: input vector, ndarray
         done = False
@@ -46,8 +68,8 @@ class CustomEnv(gym.Env):
         else:
             raise ValueError('struct component should be 1 or -1')
         self.eff = self.getEffofStructure(struct_after, self.wavelength, self.desired_angle)
-        
-        #self.eff = st.unpack('f',self.eff)
+        #print(np.float64(self.eff))
+        #self.eff = st.unpack('d',self.eff)
         #reward = result_after - result_before
 
         reward = 4*(self.eff-result_before)
