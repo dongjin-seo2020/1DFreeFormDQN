@@ -2,20 +2,20 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
-
+import torch.nn.functional as F
 
 
 class Qnet(nn.Module):
-    def __init__(self):
+    def __init__(self, ncells):
         super(Qnet, self).__init__()
 
         self.effdata = []
         self.score_sum = []
         self.score_init_final = []
 
-        self.fc1 = nn.Linear(n_cells, 2*n_cells)
-        self.fc2 = nn.Linear(2*n_cells, 2*n_cells)
-        self.fc3 = nn.Linear(2*n_cells, n_cells+1)
+        self.fc1 = nn.Linear(ncells, 2*ncells)
+        self.fc2 = nn.Linear(2*ncells, 2*ncells)
+        self.fc3 = nn.Linear(2*ncells, ncells+1)
         self.m = nn.LeakyReLU(0.1)
 
     def forward(self, x):
@@ -25,18 +25,18 @@ class Qnet(nn.Module):
         return x
 
     def sample_action(self, obs, epsilon):
-        obs = torch.reshape(obs, (1, n_cells))
+        obs = torch.reshape(obs, (1, ncells))
         #print(obs.shape)
         out = self.forward(obs)
         coin = random.random() #0<coin<1
         if coin < epsilon:
-            return np.random.randint(0, n_cells+1)
+            return np.random.randint(0, ncells+1)
         else:
            # print(out.argmax().item())
             return out.argmax().item()
 
 
-def merge_network_weights(q_target_state_dict, q_state_dict, TAU):
+def merge_network_weights(q_target_state_dict, q_state_dict, tau):
     '''
     dicts = {}
     for k,v in q_target_state_dict.items():
@@ -46,11 +46,11 @@ def merge_network_weights(q_target_state_dict, q_state_dict, TAU):
     dict_dest = dict(q_target_state_dict)
     for name, param in q_state_dict:
         if name in dict_dest:
-            dict_dest[name].data.copy_((1 - TAU) * dict_dest[name].data
-                                       + TAU * param)
+            dict_dest[name].data.copy_((1 - tau) * dict_dest[name].data
+                                       + tau * param)
 
 
-def train(q, q_target, memory, optimizer):
+def train(q, q_target, memory, optimizer, train_number, batch_size, gamma):
     double = True
     for i in range(train_number):
         s, a, r, s_prime, done_mask = memory.sample(batch_size)
