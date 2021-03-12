@@ -1,0 +1,19 @@
+{
+    "nG": 40,
+    "wl": 900, 
+    "ang": 60,
+    "lr": 0.001,
+    "gamma": 0.99,
+    "buf": 1E+5,
+    "batch_size": 32,
+    "ncells": 64,
+    "tau": 0.1,
+    "epilen": 128,
+    "epinum": 40000,
+    "printint": 50,
+    "eps_greedy_period": 100000,
+    "train_start_memory_size": 5000,
+    "train_num": 1,
+    "train_step": 2,
+    "merge_step": 20000
+}
