@@ -11,13 +11,14 @@ class CustomEnv(gym.Env):
     def __init__(self, nG, n_cells, wavelength, desired_angle):
         
         super(CustomEnv, self).__init__()
-        self.thick0 = 325
+        self.thick0 = 0.325
         self.wavelength = wavelength
         self.desired_angle = desired_angle
         self.nG = nG
         self.period = abs(self.wavelength/np.sin(self.desired_angle/180*np.pi))
         self.freq = 1/self.wavelength
         self.S = S4.New(Lattice=((self.period,0),(0,0)), NumBasis=self.nG)
+        #self.S = S4.New(Lattice=(self.period, NumBasis=self.nG)
         self.n_cells = n_cells
         self.struct = np.ones(self.n_cells)
         self.Nx = np.size(self.struct)
@@ -29,8 +30,12 @@ class CustomEnv(gym.Env):
         self.S.AddLayer(Name = 'grating', Thickness= self.thick0, Material='air')
         self.S.AddLayer(Name = 'air', Thickness=0, Material='air')
 
+
+
         self.S.SetOptions(
             PolarizationDecomposition = True,
+            PolarizationBasis ='Normal',
+
         )
         self.S.SetExcitationPlanewave(
             IncidenceAngles=(
@@ -43,7 +48,7 @@ class CustomEnv(gym.Env):
         )
         self.S.SetFrequency(self.freq)
 
-    def getEffofStructure(self, struct, wavelength, desired_angle):
+    def getEffofStructure(self, struct, wavelength, desired_angle)->float:
         #print(struct)
         self.struct = struct/2 + 0.5
         for i in range(np.size(self.struct)):
@@ -57,17 +62,34 @@ class CustomEnv(gym.Env):
                     Angle = 0,
                     Halfwidths = (self.period/(2*self.Nx), 0)
                     )
-        
-        
-        (fi, bi) = self.S.GetPoyntingFlux(Layer = 'glass')
-        (fo, bo) = self.S.GetPoyntingFlux(Layer = 'air')
-        #Pi = self.S.GetPowerFluxByOrder(Layer = 'glass')
-        #Po = self.S.GetPowerFluxByOrder(Layer = 'air')
 
-        #print(Pi)
+        Glist = self.S.GetBasisSet()
+        (fo, bo)= self.S.GetPoyntingFlux(Layer = 'air')
 
+        Pi = self.S.GetPowerFluxByOrder(Layer = 'glass')
+        Po = self.S.GetPowerFluxByOrder(Layer = 'air')
+        #print('order: ', Glist)
+        #print('Glist[1]: ', Glist[1])
+        #print('Pi:', Pi)
+        #print('Pi[1]: ', Pi[1])
+        #print('fo: ', fo)
+        #print('bo: ', bo)
+        #print(Pi[0])
+        '''
+        print('Po: ', Po)
+        print('Pi: ',Pi)
+        print('Po[0]: ', Po[0])
+        print('Pi[1]: ', Pi[1])
+        print('Po[0][0]: ', Po[0][0])
+        print('Pi[1][1]: ', Pi[1][1])
+        '''
+        diff_air = abs(Po[0][0])
+        diff_glass = abs(Pi[1][1])
 
-        effs = np.real(fo/fi) 
+        #print('bi: ', abs(bi))
+        #print('diff glass: ', diff_glass)
+        effs = diff_glass/diff_air
+        #effs = np.real(fo/fi) 
         #effs = np.real(Pi/Po)
         return effs
     
@@ -88,9 +110,12 @@ class CustomEnv(gym.Env):
             raise ValueError('struct component should be 1 or -1')
         self.eff = self.getEffofStructure(struct_after, self.wavelength,\
                                          self.desired_angle)
+        
+        
+        reward = self.eff**3
         #reward = result_after - result_before
         
-        reward = 4*(self.eff-result_before)
+        #reward = 4*(self.eff-result_before)
         
         #reward = 1-(1-result_after)**3
              
