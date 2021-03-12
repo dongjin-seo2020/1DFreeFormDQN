@@ -85,7 +85,7 @@ def merge_network_weights(q_target_state_dict, q_state_dict, tau):
                                        + tau * param)
 
 
-def train_network(q, q_target, memory, optimizer, train_number, batch_size, gamma, double=False, dueling=False):
+def train_network(q, q_target, memory, optimizer, train_number, batch_size, gamma, double=False):
     #double = True
     for i in range(train_number):
         s, a, r, s_prime, done_mask = memory.sample(batch_size)
