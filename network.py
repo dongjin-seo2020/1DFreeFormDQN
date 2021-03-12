@@ -54,7 +54,7 @@ class DuelingQnet(nn.Module):
         x = self.m(self.fc1(x))
         x = self.m(self.fc2(x))
         a = self.fc_a(x)
-        a = a - a.max(-1, keepdim=True).detach()
+        a = a - a.max(-1, keepdim=True)[0].detach()
         v = self.fc_v(x)
         q = a + v
         return q
