@@ -36,6 +36,41 @@ class Qnet(nn.Module):
             return out.argmax().item()
 
 
+class DuelingQnet(nn.Module):
+    def __init__(self, ncells):
+        super(Qnet, self).__init__()
+
+        self.effdata = []
+        self.score_sum = []
+        self.score_init_final = []
+        self.ncells = ncells
+        self.fc1 = nn.Linear(ncells, 2*ncells)
+        self.fc2 = nn.Linear(2*ncells, 2*ncells)
+        self.fc_a = nn.Linear(2*ncells, ncells+1)
+        self.fc_v = nn.Linear(2*ncells, 1)
+        self.m = nn.LeakyReLU(0.1)
+
+    def forward(self, x):
+        x = self.m(self.fc1(x))
+        x = self.m(self.fc2(x))
+        a = self.fc_a(x)
+        a = a - a.max(-1, keepdim=True).detach()
+        v = self.fc_v(x)
+        q = a + v
+        return q
+
+    def sample_action(self, obs, epsilon):
+        obs = torch.reshape(obs, (1, self.ncells))
+        #print(obs.shape)
+        out = self.forward(obs)
+        coin = random.random() #0<coin<1
+        if coin < epsilon:
+            return np.random.randint(0, self.ncells+1)
+        else:
+           # print(out.argmax().item())
+            return out.argmax().item()
+
+
 def merge_network_weights(q_target_state_dict, q_state_dict, tau):
     '''
     dicts = {}
