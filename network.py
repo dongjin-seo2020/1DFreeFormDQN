@@ -38,7 +38,7 @@ class Qnet(nn.Module):
 
 class DuelingQnet(nn.Module):
     def __init__(self, ncells):
-        super(Qnet, self).__init__()
+        super(DuelingQnet, self).__init__()
 
         self.effdata = []
         self.score_sum = []
