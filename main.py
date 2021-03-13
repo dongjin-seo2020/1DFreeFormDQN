@@ -1,4 +1,4 @@
-from deflector_S4 import CustomEnv
+from DeflectorEnv_Reticolo_Win import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -125,8 +125,12 @@ if __name__== '__main__':
         print('summaryWritername is: %s' %summaryWriterName)
         writer = SummaryWriter(path_logs+summaryWriterName)
     
-    #setting up the environment
-    env = CustomEnv(int(args.nG), int(args.ncells), args.wl, args.ang)
+    ##### setting up the environment
+    # Reticolo
+    #env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    # S4
+    env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+    
 
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
