@@ -127,9 +127,9 @@ if __name__== '__main__':
     
     ##### setting up the environment
     # Reticolo
-    #env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    env = CustomEnv(int(args.ncells), args.wl, args.ang)
     # S4
-    env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+    #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
     
 
     if args.network=='DQN' or args.network=='Double':
@@ -180,14 +180,14 @@ if __name__== '__main__':
             epi_length = t+1
             count += 1
 
-            if (memory.size() > args.train_start_memory_size
-                and count % args.train_step == 0):
+            if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
 
                 q.train()
-                network.train_network(q, q_target, memory, optimizer, args.train_num, \
-                    args.batch_size, args.gamma, double=double)
+                network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
+                    int(args.batch_size), args.gamma, double=double)
 
-            if count % args.merge_step == 0:
+            if count % int(args.merge_step) == 0:
 
                 network.merge_network_weights(q_target.named_parameters(),
                                       q.named_parameters(), args.tau)
