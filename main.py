@@ -128,7 +128,7 @@ if __name__== '__main__':
     #setting up the environment
     env = CustomEnv(int(args.nG), int(args.ncells), args.wl, args.ang)
 
-    if args.network=='DQN' or network=='Double':
+    if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
         q_target = network.Qnet(int(args.ncells))
         q_target.load_state_dict(q.state_dict())
@@ -148,6 +148,9 @@ if __name__== '__main__':
     #setting up the optimizer
     if args.optimizer == 'Adam':
         optimizer = optim.Adam(q.parameters(), lr=args.lr)
+
+    ## TODO  elif optimzer: nadam, sgd, ...
+
 
     epi_len_st= []
     
@@ -200,19 +203,20 @@ if __name__== '__main__':
                 writer.add_scalar('episode length',
                                 epi_length,
                                 n_epi)
-                
-
+            
             q.effdata.append(eff_next)
             epi_len_st.append(epi_length)
 
-            ##TODO: logger 로 이 print 값들 저장 + 하이퍼파라미터 값 저장
-            
-            #logger.write_logs(n_epi, n_step, average_reward, eff, maxeff, epilen, memory_size, ,epsilon,  )
+            ##TODO: weight save & load
 
-            print("n_episode : {}, score : {}, eff : {}, effmax : {}, episode length : {}, n_buffer : {}, eps : {:.1f}%".format(
-                  n_epi, score, eff_next, np.max(eff_epi_st), epi_length, memory.size(), epsilon*100))  #score/print_interval
-            logger
+            ##TODO: 또 명령어로 들어온 애들 처리
             
+            #logging the data: saved in logs+tensorboard folders
+            #saved data: hyperparameters(json), logs(csv)
+            logger.write_logs(summaryWriterName+'_logs', n_epi, eff_next, \
+                np.max(eff_epi_st), epi_length, memory.size(), epsilon*100)
+            logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
+
             if args.tb==True:
                 writer.add_scalar('efficency', eff_next, n_epi)
                 writer.add_scalar('max efficiency', np.max(eff_epi_st), n_epi)
@@ -225,17 +229,14 @@ if __name__== '__main__':
             if args.save_np_struct == True: 
                 logger.numpystructplotter(path_np_struct, s, n_epi)
 
-        score = 0.0
 
     if args.save_summary == True:
 
         logger.summaryplotter(q, epi_len_st, s, path_summary)
     
 
-    #logging   TO DO
 
-
-
+    # TODO : change this part to logger.final_logs()
     print('initial eff: {}'.format(eff_init))
     print('final eff: {}'.format(eff_next))
     print("Qnet's state_dict:")
