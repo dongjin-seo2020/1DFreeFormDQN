@@ -21,7 +21,7 @@ def write_logs(loggername:str, n_epi, eff, effmax, \
 
 
     #csv
-    with open(loggername+'.csv',newline='') as f:
+    with open(loggername+'.csv','a') as f:
         r = csv.reader(f)
         data = [line for line in r]
     output = csv.writer(open(loggername+'.csv', 'w', newline=''))
