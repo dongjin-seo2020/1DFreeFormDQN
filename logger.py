@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import csv
+import os
 
 #write logs and .csv file of hyperparmeters
 def write_logs(loggername:str, n_epi, eff, effmax, \
@@ -21,13 +22,21 @@ def write_logs(loggername:str, n_epi, eff, effmax, \
 
 
     #csv
-    with open(loggername+'.csv','a') as f:
-        r = csv.reader(f)
-        data = [line for line in r]
-    output = csv.writer(open(loggername+'.csv', 'w', newline=''))
-    output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
-    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
+
+    if os.path.isfile(loggername+'.csv'):
+    	with open(loggername+'.csv','a') as f:
+        	r = csv.reader(f)
+        	data = [line for line in r]
+    	output = csv.writer(open(loggername+'.csv', 'w', newline=''))
+    	output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
+    	output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
   
+    else:
+    	output = csv.writer(open(loggername+'.csv', 'w', newline=''))
+  	 	output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
+    	output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
+  
+    
 
 def write_json_hyperparameter(path_logs_tb, args):
     #write json file of hyperparameters
