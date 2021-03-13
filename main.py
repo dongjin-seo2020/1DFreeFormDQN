@@ -1,4 +1,4 @@
-from DeflectorEnv_Reticolo_Win import CustomEnv
+from deflector_reticolo import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
