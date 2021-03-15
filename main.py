@@ -226,6 +226,7 @@ if __name__== '__main__':
                 writer.add_scalar('max efficiency', np.max(eff_epi_st), n_epi)
                 writer.add_scalar('memory size', memory.size(), n_epi)
                 writer.add_scalar('episode length', epi_length, n_epi)
+		writer.add_scalar('epsilon [%]', epsilon*100, n_epi)
             
             if args.save_devices == True:
                 logger.deviceplotter(path_devices, s, n_epi)
