@@ -8,7 +8,7 @@ import os
 
 #write logs and .csv file of hyperparmeters
 def write_logs(loggername:str, n_epi, eff, effmax, \
-            episode_length, n_buffer, epsilon_percent):
+            episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
     lgr = logging.getLogger(loggername)
@@ -16,8 +16,8 @@ def write_logs(loggername:str, n_epi, eff, effmax, \
     
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
-    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s', \
-                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent)
+    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, overall step number:%s', \
+                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
 
 
 
