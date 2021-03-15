@@ -121,7 +121,7 @@ if __name__== '__main__':
         t = datetime.datetime.now()
         
         summaryWriterName = t.strftime("%Y_%m_%d_%H_%M_%S")+"_wl"+str(args.wl)+\
-            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))
+            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))+args.network
         print('summaryWritername is: %s' %summaryWriterName)
         writer = SummaryWriter(path_logs+summaryWriterName)
     
@@ -221,7 +221,7 @@ if __name__== '__main__':
             
             #logging the data: saved in logs+tensorboard folders
             #saved data: hyperparameters(json), logs(csv)
-            logger.write_logs(path_logs+summaryWriterName+args.network+'_logs', n_epi, eff_next, \
+            logger.write_logs(path_logs+summaryWriterName+'_logs', n_epi, eff_next, \
                 np.max(eff_epi_st), epi_length, memory.size(), epsilon*100, count)
             logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
 
