@@ -218,7 +218,7 @@ if __name__== '__main__':
             #logging the data: saved in logs+tensorboard folders
             #saved data: hyperparameters(json), logs(csv)
             logger.write_logs(path_logs+summaryWriterName+'_logs', n_epi, eff_next, \
-                np.max(eff_epi_st), epi_length, memory.size(), epsilon*100)
+                np.max(eff_epi_st), epi_length, memory.size(), epsilon*100, count)
             logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
 
             if args.tb==True:
