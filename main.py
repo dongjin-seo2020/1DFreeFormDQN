@@ -207,11 +207,11 @@ if __name__== '__main__':
                 writer.add_scalar('episode length',
                                 epi_length,
                                 n_epi)
-            	writer.add_scalar('efficency', eff_next, n_epi)
+                writer.add_scalar('efficency', eff_next, n_epi)
                 writer.add_scalar('max efficiency', np.max(eff_epi_st), n_epi)
                 writer.add_scalar('memory size', memory.size(), n_epi)
                 writer.add_scalar('episode length', epi_length, n_epi)
-		writer.add_scalar('epsilon [%]', epsilon*100, n_epi)
+                writer.add_scalar('epsilon [%]', epsilon*100, n_epi)
             q.effdata.append(eff_next)
             epi_len_st.append(epi_length)
 
