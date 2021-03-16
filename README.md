@@ -11,3 +11,8 @@ deflection angle 60 degree / wavelength 900nm (from [Fan group sample inference 
 
 ## simulation
 The simulation which corresponds to the environment in RL framework runs on MATLAB RCWA open source [Reticolo](https://zenodo.org/record/3610175#.YBkECS2UGX0)
+
+## example
+~~~
+python main.py --wavelength=900 --angle=60 --eps_greedy_period=1000000
+~~~
