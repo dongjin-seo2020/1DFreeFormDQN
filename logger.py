@@ -7,20 +7,19 @@ import csv
 import os
 
 #write logs and .csv file of hyperparmeters
-def write_logs(loggername:str, n_epi, eff, effmax, \
+def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
             episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
-    lgr = logging.getLogger(loggername)
-    lgr.setLevel(logging.INFO)
-    
-    sh = logging.StreamHandler()
-    lgr.addHandler(sh)
-    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, overall step number:%s', \
+    lgr.setLevel(logging.DEBUG)
+    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
                 n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
 
 
-
+    #csv
+    output = csv.writer(open(loggername+'.csv', 'w'))
+    output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
+    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
     #csv
 
     if os.path.isfile(loggername+'.csv'):
