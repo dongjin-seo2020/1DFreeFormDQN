@@ -160,6 +160,12 @@ if __name__== '__main__':
     
     average_reward = 0.0
     count = 0
+    loggername = path_logs+summaryWriterName+'_logs'
+    lgr = logging.getLogger(loggername)
+    sh = logging.StreamHandler()
+    lgr.addHandler(sh)
+
+
     for n_epi in range(int(args.epinum)):
         s, eff_init = env.reset()
         done = False
@@ -221,7 +227,7 @@ if __name__== '__main__':
             
             #logging the data: saved in logs+tensorboard folders
             #saved data: hyperparameters(json), logs(csv)
-            logger.write_logs(path_logs+summaryWriterName+'_logs', n_epi, eff_next, \
+            logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
                 np.max(eff_epi_st), epi_length, memory.size(), epsilon*100, count)
             logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
 
