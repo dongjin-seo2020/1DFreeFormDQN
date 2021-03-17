@@ -1,4 +1,4 @@
-from deflector_reticolo import CustomEnv
+from deflector_S4 import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -9,6 +9,7 @@ import argparse
 import os
 import json
 import datetime
+import logging
 
 import matplotlib
 matplotlib.use('Agg')
@@ -127,7 +128,7 @@ if __name__== '__main__':
     
     ##### setting up the environment
     # Reticolo
-    env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    env = CustomEnv(int(args.nG), int(args.ncells), args.wl, args.ang)
     # S4
     #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
     
@@ -164,8 +165,6 @@ if __name__== '__main__':
     lgr = logging.getLogger(loggername)
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
-
-
     for n_epi in range(int(args.epinum)):
         s, eff_init = env.reset()
         done = False
@@ -227,6 +226,7 @@ if __name__== '__main__':
             
             #logging the data: saved in logs+tensorboard folders
             #saved data: hyperparameters(json), logs(csv)
+            
             logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
                 np.max(eff_epi_st), epi_length, memory.size(), epsilon*100, count)
             logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
@@ -242,7 +242,14 @@ if __name__== '__main__':
 
         logger.summaryplotter(q, epi_len_st, s, path_summary)
     
+    if args.source_code_summary == True:
+        ### import inspect
+        ### lines = inspect.getsource(function name)
+        ### print(lines)
 
+        pass
+
+    
 
     # TODO : change this part to logger.final_logs()
     print('initial eff: {}'.format(eff_init))
@@ -264,6 +271,3 @@ if __name__== '__main__':
     torch.save(q.state_dict(), q_net_name)
     torch.save(q_target.state_dict(), q_target_net_name)
     env.close()
-
-
-
