@@ -4,7 +4,7 @@
     "ang": 60,
     "lr": 0.001,
     "gamma": 0.99,
-    "buf": 1E+5,
+    "buf": 1E+6,
     "batch_size": 32,
     "ncells": 64,
     "tau": 0.1,
