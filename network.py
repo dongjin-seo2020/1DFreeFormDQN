@@ -106,3 +106,4 @@ def train_network(q, q_target, memory, optimizer, train_number, batch_size, gamm
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+    return loss #for logging
