@@ -103,7 +103,7 @@ if __name__== '__main__':
 
     parser.add_argument('--network', default='DQN', help='decide which network to use: "DQN"(default), "Double"(Double DQN), "Dueling"(Dueling DQN)')
 
-    parser.add_argument('--optimizer', default='Adam', help='decide which optimizer to use')
+    parser.add_argument('--optimizer', default='Adam', help='decide which optimizer to use: Adam, AdamW, SGD, RMSprop')
 
     parser.add_argument('--save_optimum', default=True, help='decide whether to save the optimal structure or not')
 
@@ -172,7 +172,7 @@ if __name__== '__main__':
     elif args.optimizer == 'SGD':
 	optimizer = optim.SGD(q.parameters(), lr=args.lr)
 
-    elif args.optimizer == 'RMSPROP':
+    elif args.optimizer == 'RMSprop':
 	optimizer = optim.RMSprop(q.parameters(), lr=args.lr)
 
 
