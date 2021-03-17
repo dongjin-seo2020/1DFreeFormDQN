@@ -168,6 +168,9 @@ if __name__== '__main__':
     elif args.optimizer == 'SGD':
         pass
 
+    elif args.optimizer == 'RMSPROP':
+        pass
+
     epi_len_st= []
     
     count = 0
