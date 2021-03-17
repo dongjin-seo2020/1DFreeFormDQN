@@ -139,7 +139,7 @@ if __name__== '__main__':
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
         q_target = network.Qnet(int(args.ncells))
-        if load_weight==True:
+        if args.load_weight==True:
 
             #TODO
             pass
