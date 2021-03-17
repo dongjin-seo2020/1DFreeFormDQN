@@ -215,18 +215,19 @@ if __name__== '__main__':
                     np.save('./np_struct/efficiency.npy',np.array(eff_flag))
                     
 
-            if (memory.size() > int(args.train_start_memory_size)
-                and count % int(args.train_step) == 0):
+            if args.train == True:
+                if (memory.size() > int(args.train_start_memory_size)
+                    and count % int(args.train_step) == 0):
+                    
+                    q.train()
+                    loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
+                        int(args.batch_size), args.gamma, double=double)
 
-                q.train()
-                loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
-                    int(args.batch_size), args.gamma, double=double)
+                if count % int(args.merge_step) == 0:
 
-            if count % int(args.merge_step) == 0:
-
-                network.merge_network_weights(q_target.named_parameters(),
-                                      q.named_parameters(), args.tau)
-            
+                    network.merge_network_weights(q_target.named_parameters(),
+                                        q.named_parameters(), args.tau)
+                
             if done:
                 break
 
@@ -278,7 +279,7 @@ if __name__== '__main__':
     
     if args.source_code_save == True:
         
-        ### os. file copy to 'code' folder
+        ### TODO os. file copy to 'code' folder
 
         pass
     
