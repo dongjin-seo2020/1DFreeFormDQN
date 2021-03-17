@@ -160,16 +160,22 @@ if __name__== '__main__':
     #setting up the optimizer
     if args.optimizer == 'Adam':
         optimizer = optim.Adam(q.parameters(), lr=args.lr)
-
-    ## TODO  elif optimzer: nadam, sgd, ...
+	
     elif args.optimizer == 'Nadam':
-        pass
+        # import optim
+	# optim has much more optimizers than torch.optim
+	pass
+
+    elif args.optimizer == 'AdamW':
+	optimizer = optim.AdamW(q.parameters(), lr=args.lr)
 
     elif args.optimizer == 'SGD':
-        pass
+	optimizer = optim.SGD(q.parameters(), lr=args.lr)
 
     elif args.optimizer == 'RMSPROP':
-        pass
+	optimizer = optim.RMSprop(q.parameters(), lr=args.lr)
+
+
 
     epi_len_st= []
     
