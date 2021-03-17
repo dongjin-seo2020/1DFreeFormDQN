@@ -7,7 +7,7 @@ import random
 import torch
 import numpy as np
 
-class ReplayBuffer():
+class ReplayBuffer_deque():
     def __init__(self, buffer_limit):
         self.buffer = collections.deque(maxlen=buffer_limit)
 
@@ -34,8 +34,8 @@ class ReplayBuffer():
     def size(self):
         return len(self.buffer)
 
-
-class ReplayBuffer_np():
+#written by namdw
+class ReplayBuffer():
     def __init__(self, buffer_limit, n_cells=64):
         self.s = np.ones((buffer_limit, n_cells), dtype=np.uint8)
         self.a = np.ones((buffer_limit, 1), dtype=np.uint8)
