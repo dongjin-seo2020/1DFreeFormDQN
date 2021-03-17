@@ -70,7 +70,10 @@ if __name__== '__main__':
     #training or inference
     parser.add_argument('--train', default=True, help="if True, train. \
                         if False, infer only")
-                        
+    
+    #decide wheter to save model weights or not
+    parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
+                    
     #save model as checkpoint in every episode
     parser.add_argument('--checkpoint', default=False, help="if True, save weights of every episode. \
                         if False, write over same file")
@@ -91,18 +94,18 @@ if __name__== '__main__':
     #decide wheter to save np structure or not
     parser.add_argument('--save_np_struct', default=False, help='decide wheter to save numpy structure of devices or not')
 
-    #decide wheter to save model weights or not
-    parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
-
+    
     #decide wheter to save summary or not
     parser.add_argument('--save_summary', default=True, help='decide wheter to save model or not')
 
     #decide wheter to save source code or not
-    parser.add_argument('--source_code_summary', default=True, help='decide wheter to save model or not')
+    parser.add_argument('--source_code_save', default=True, help='decide wheter to save model or not')
 
     parser.add_argument('--network', default='DQN', help='decide which network to use: "DQN"(default), "Double"(Double DQN), "Dueling"(Dueling DQN)')
 
     parser.add_argument('--optimizer', default='Adam', help='decide which optimizer to use')
+
+    parser.add_argument('--save_optimum', default=True, help='decide whether to save the optimal structure or not')
 
     args = parser.parse_args()
 
@@ -136,6 +139,10 @@ if __name__== '__main__':
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
         q_target = network.Qnet(int(args.ncells))
+        if load_weight==True:
+
+            #TODO
+            pass
         q_target.load_state_dict(q.state_dict())
 
     elif args.network =='Dueling':
@@ -143,7 +150,7 @@ if __name__== '__main__':
         q_target = network.DuelingQnet(int(args.ncells))
         q_target.load_state_dict(q.state_dict())
 
-    if args.network=='Double' or args.network=='Dueling':
+    if args.network=='Double':
         double=True
     else:
         double=False
@@ -155,11 +162,17 @@ if __name__== '__main__':
         optimizer = optim.Adam(q.parameters(), lr=args.lr)
 
     ## TODO  elif optimzer: nadam, sgd, ...
+    elif args.optimizer == 'Nadam':
+        pass
+
+    elif args.optimizer == 'SGD':
+        pass
+
 
 
     epi_len_st= []
     
-    average_reward = 0.0
+    
     count = 0
     loggername = path_logs+summaryWriterName+'_logs'
     lgr = logging.getLogger(loggername)
@@ -170,7 +183,8 @@ if __name__== '__main__':
         done = False
         eff_epi_st = np.zeros((int(args.epilen), 1))
         epi_length = 0
-        
+        average_reward = 0.0
+
         for t in range(int(args.epilen)):
             epsilon = max(0.01, 0.9 * (1. - count / int(args.eps_greedy_period)))
             q.eval()
@@ -189,7 +203,7 @@ if __name__== '__main__':
                 and count % int(args.train_step) == 0):
 
                 q.train()
-                network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
+                loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
                     int(args.batch_size), args.gamma, double=double)
 
             if count % int(args.merge_step) == 0:
@@ -203,24 +217,23 @@ if __name__== '__main__':
         if n_epi % int(args.printint) == 0 and n_epi != 0:
 
             if args.tb==True:
-                writer.add_scalar('average reward',
-                                average_reward,
+                writer.add_scalar('one step average reward / episode',
+                                average_reward/epi_length,
                                 n_epi)
-                writer.add_scalar('final step efficiency',
+                writer.add_scalar('final step efficiency / episode',
                                 eff_next,
                                 n_epi)
-                writer.add_scalar('episode length',
+                writer.add_scalar('episode length / episode',
                                 epi_length,
                                 n_epi)
-                writer.add_scalar('efficency', eff_next, n_epi)
-                writer.add_scalar('max efficiency', np.max(eff_epi_st), n_epi)
-                writer.add_scalar('memory size', memory.size(), n_epi)
-                writer.add_scalar('episode length', epi_length, n_epi)
-                writer.add_scalar('epsilon [%]', epsilon*100, n_epi)
+                writer.add_scalar('episode length / episode', epi_length, n_epi)
+                writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
+                writer.add_scalar('efficency / step', eff_next, count)
+                writer.add_scalar('max efficiency / step', np.max(eff_epi_st), count)
+                writer.add_scalar('memory size / step', memory.size(), count)
+                writer.add_scalar('train loss / step', loss, count)
             q.effdata.append(eff_next)
             epi_len_st.append(epi_length)
-
-            ##TODO: weight save & load
 
             ##TODO: 또 명령어로 들어온 애들 처리
             
@@ -237,37 +250,40 @@ if __name__== '__main__':
             if args.save_np_struct == True: 
                 logger.numpystructplotter(path_np_struct, s, n_epi)
 
+            if args.checkpoint == True:
+                torch.save(q.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q')
+                torch.save(q_target.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q_target')
 
     if args.save_summary == True:
 
         logger.summaryplotter(q, epi_len_st, s, path_summary)
     
-    if args.source_code_summary == True:
-        ### import inspect
-        ### lines = inspect.getsource(function name)
-        ### print(lines)
+    if args.source_code_save == True:
+        
+        ### os. file copy to 'code' folder
 
         pass
-
     
 
     # TODO : change this part to logger.final_logs()
-    print('initial eff: {}'.format(eff_init))
-    print('final eff: {}'.format(eff_next))
-    print("Qnet's state_dict:")
-    for param_tensor in q.state_dict():
-        print(param_tensor, "\t", q.state_dict()[param_tensor].size())
-    print("Q_target's state_dict:")
-    for param_tensor in q_target.state_dict():
-        print(param_tensor, "\t", q_target.state_dict()[param_tensor].size())
-    print("Qnet's Optimizer's state_dict:")
-    for var_name in q.state_dict():
-        print(var_name, "\t", q.state_dict()[var_name])
+    if args.save_model == True:
+        print('initial eff: {}'.format(eff_init))
+        print('final eff: {}'.format(eff_next))
+        print("Qnet's state_dict:")
+        for param_tensor in q.state_dict():
+            print(param_tensor, "\t", q.state_dict()[param_tensor].size())
+        print("Q_target's state_dict:")
+        for param_tensor in q_target.state_dict():
+            print(param_tensor, "\t", q_target.state_dict()[param_tensor].size())
+        print("Qnet's Optimizer's state_dict:")
+        for var_name in q.state_dict():
+            print(var_name, "\t", q.state_dict()[var_name])
 
-    print("Q_target's Optimizer's state_dict:")
-    for var_name in q_target.state_dict():
-        print(var_name, "\t", q_target.state_dict()[var_name])
+        print("Q_target's Optimizer's state_dict:")
+        for var_name in q_target.state_dict():
+            print(var_name, "\t", q_target.state_dict()[var_name])
 
-    torch.save(q.state_dict(), q_net_name)
-    torch.save(q_target.state_dict(), q_target_net_name)
-    env.close()
+        torch.save(q.state_dict(), path_model+summaryWriterName+'/'+'final_steps_q')
+        torch.save(q_target.state_dict(), path_model+summaryWriterName+'/'+'final_steps_q_target')
+
+        env.close()
