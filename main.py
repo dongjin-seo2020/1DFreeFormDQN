@@ -168,22 +168,23 @@ if __name__== '__main__':
     elif args.optimizer == 'SGD':
         pass
 
-
-
     epi_len_st= []
     
-    
     count = 0
+    
+    #logger handler
     loggername = path_logs+summaryWriterName+'_logs'
     lgr = logging.getLogger(loggername)
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
+
     for n_epi in range(int(args.epinum)):
         s, eff_init = env.reset()
         done = False
         eff_epi_st = np.zeros((int(args.epilen), 1))
         epi_length = 0
         average_reward = 0.0
+        eff_flag = 0
 
         for t in range(int(args.epilen)):
             epsilon = max(0.01, 0.9 * (1. - count / int(args.eps_greedy_period)))
@@ -198,6 +199,17 @@ if __name__== '__main__':
 
             epi_length = t+1
             count += 1
+            
+            if args.save_optimum == True: 
+                if eff_next>eff_flag:
+                    eff_flag = eff_next
+                    plt.figure(figsize=(20,10))
+                    plt.imshow(s.reshape(1,-1), cmap = 'Greys')
+                    plt.yticks([])
+                    plt.savefig('./devices/max_struct', format = 'png')
+                    plt.savefig('./devices/max_struct', format = 'eps')
+                    np.save('./np_struct/max_struct.npy',s)
+                    
 
             if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
@@ -231,7 +243,9 @@ if __name__== '__main__':
                 writer.add_scalar('efficency / step', eff_next, count)
                 writer.add_scalar('max efficiency / step', np.max(eff_epi_st), count)
                 writer.add_scalar('memory size / step', memory.size(), count)
-                writer.add_scalar('train loss / step', loss, count)
+                if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
+                    writer.add_scalar('train loss / step', loss, count)
             q.effdata.append(eff_next)
             epi_len_st.append(epi_length)
 
