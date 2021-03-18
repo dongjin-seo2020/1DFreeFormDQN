@@ -17,6 +17,8 @@ class Qnet(nn.Module):
         self.fc2 = nn.Linear(2*ncells, 2*ncells)
         self.fc3 = nn.Linear(2*ncells, ncells+1)
         self.m = nn.LeakyReLU(0.1)
+        
+        init_params(self)
 
     def forward(self, x):
         x = self.m(self.fc1(x))
@@ -49,6 +51,8 @@ class DuelingQnet(nn.Module):
         self.fc_a = nn.Linear(2*ncells, ncells+1)
         self.fc_v = nn.Linear(2*ncells, 1)
         self.m = nn.LeakyReLU(0.1)
+        
+        init_params(self)
 
     def forward(self, x):
         x = self.m(self.fc1(x))
@@ -70,7 +74,18 @@ class DuelingQnet(nn.Module):
            # print(out.argmax().item())
             return out.argmax().item()
 
-
+        
+def init_params(net, val=np.sqrt(2)):
+    for module in net.modules():
+        if isinstance(module, nn.Conv2d):
+            nn.init.orthogonal_(module.weight, val)
+            module.bias.data.zero_()
+        if isinstance(module, nn.Linear):
+            nn.init_orthogonal_(module.weight, val)
+            if module.bias is not None:
+                module.bias.data.zero_()
+                
+                
 def merge_network_weights(q_target_state_dict, q_state_dict, tau):
     '''
     dicts = {}
