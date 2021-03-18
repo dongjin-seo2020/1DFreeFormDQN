@@ -1,5 +1,5 @@
-#from deflector_reticolo import CustomEnv
-from deflector_S4 import CustomEnv
+from deflector_reticolo import CustomEnv
+#from deflector_S4 import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
