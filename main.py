@@ -121,6 +121,9 @@ if __name__== '__main__':
 		        setattr(args, k, float(data[k]))
         #for k, v in args.__dict__()
 
+	
+        print(vars(args))
+
     t = datetime.datetime.now()
     timeFolderName = t.strftime("%Y_%m_%d_%H_%M_%S")+"/wl"+str(args.wl)+\
             "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))
