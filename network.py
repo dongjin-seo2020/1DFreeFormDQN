@@ -81,7 +81,7 @@ def init_params(net, val=np.sqrt(2)):
             nn.init.orthogonal_(module.weight, val)
             module.bias.data.zero_()
         if isinstance(module, nn.Linear):
-            nn.init_orthogonal_(module.weight, val)
+            nn.init.orthogonal_(module.weight, val)
             if module.bias is not None:
                 module.bias.data.zero_()
                 
