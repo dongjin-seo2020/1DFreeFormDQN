@@ -150,7 +150,7 @@ if __name__== '__main__':
         q_target = network.DuelingQnet(int(args.ncells))
         q_target.load_state_dict(q.state_dict())
 
-    if args.network=='Double':
+    if args.network=='Double' or args.network=='Dueling':
         double=True
     else:
         double=False
