@@ -9,7 +9,7 @@
     "ncells": 64,
     "tau": 0.1,
     "epilen": 128,
-    "epinum": 40000,
+    "stepnum": 2E+6,
     "printint": 50,
     "eps_greedy_period": 1E+6,
     "train_start_memory_size": 5000,
