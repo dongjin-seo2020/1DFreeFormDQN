@@ -11,10 +11,7 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
             episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
-    lgr.setLevel(logging.DEBUG)
-    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
-                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
-
+    
 
     #csv
     output = csv.writer(open(loggername+'.csv', 'w'))
