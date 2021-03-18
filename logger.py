@@ -18,8 +18,8 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
 
     #csv
     output = csv.writer(open(loggername+'.csv', 'w'))
-    output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
-    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
+    output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]', 'count]')
+    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
     #csv
 
     if os.path.isfile(loggername+'.csv'):
