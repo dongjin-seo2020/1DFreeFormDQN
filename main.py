@@ -199,9 +199,7 @@ if __name__== '__main__':
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
     lgr.setLevel(logging.DEBUG)
-    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
-                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
-
+    
 
     if args.source_code_save == True:
         
