@@ -11,7 +11,9 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
             episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
-    
+    lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
+                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
+
 
     #csv
     output = csv.writer(open(loggername+'.csv', 'w'))
@@ -38,7 +40,7 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
 def write_json_hyperparameter(path_logs_tb, args):
     #write json file of hyperparameters
     with open(path_logs_tb+'/config.json','w') as fp:
-        print(vars(args))
+        #print(vars(args))
         json.dump(vars(args),fp)
 
 def final_logs(eff_init, eff_next, q, q_target):
