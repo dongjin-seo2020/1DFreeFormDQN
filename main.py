@@ -178,7 +178,7 @@ if __name__== '__main__':
 
 
     epi_len_st= []
-    
+    n_epi =0    
     count = 0
     
     #logger handler
@@ -283,6 +283,10 @@ if __name__== '__main__':
                 torch.save(q.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q')
                 torch.save(q_target.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q_target')
 
+
+        n_epi +=1
+
+        
     if args.save_summary == True:
 
         logger.summaryplotter(q, epi_len_st, s, path_summary)
