@@ -223,7 +223,7 @@ if __name__== '__main__':
                     plt.savefig('./devices/max_struct', format = 'eps')
                     np.save('./np_struct/max_struct.npy',s)
                     np.save('./np_struct/efficiency.npy',np.array(eff_flag))
-                    
+                    plt.close()
 
             if args.train == True:
                 if (memory.size() > int(args.train_start_memory_size)
