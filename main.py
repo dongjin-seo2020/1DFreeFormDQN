@@ -196,7 +196,7 @@ if __name__== '__main__':
         eff_flag = 0
 
         for t in range(int(args.epilen)):
-            epsilon = max(0.01, 0.9 * (1. - count / int(args.eps_greedy_period)))
+            epsilon = max(0.01, 0.9 * (1. - count / args.eps_greedy_period))
             q.eval()
             a = q.sample_action(torch.from_numpy(s).float(), epsilon)
             s_prime, eff_next, r, done = env.step(a)
