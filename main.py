@@ -50,7 +50,7 @@ if __name__== '__main__':
     parser.add_argument('--ncells', default=None, help='number of cells')
     parser.add_argument('--tau', default=None, help='soft update weight')
     parser.add_argument('--epilen', default=None, help='episode length')
-    parser.add_argument('--epinum', default=None, help='episode number')
+    parser.add_argument('--stepnum', default=None, help='overall step number')
     parser.add_argument('--printint', default=None, help='interval of \
                         printing intermediate outputs')
     parser.add_argument('--eps_greedy_period', default=None, \
@@ -160,20 +160,20 @@ if __name__== '__main__':
     #setting up the optimizer
     if args.optimizer == 'Adam':
         optimizer = optim.Adam(q.parameters(), lr=args.lr)
-	
+
     elif args.optimizer == 'Nadam':
         # import optim
-	# optim has much more optimizers than torch.optim
-	pass
+    # optim has much more optimizers than torch.optim
+        pass
 
     elif args.optimizer == 'AdamW':
-	optimizer = optim.AdamW(q.parameters(), lr=args.lr)
+        optimizer = optim.AdamW(q.parameters(), lr=args.lr)
 
     elif args.optimizer == 'SGD':
-	optimizer = optim.SGD(q.parameters(), lr=args.lr)
+        optimizer = optim.SGD(q.parameters(), lr=args.lr)
 
     elif args.optimizer == 'RMSprop':
-	optimizer = optim.RMSprop(q.parameters(), lr=args.lr)
+        optimizer = optim.RMSprop(q.parameters(), lr=args.lr)
 
 
 
@@ -187,7 +187,7 @@ if __name__== '__main__':
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
 
-    for n_epi in range(int(args.epinum)):
+    while(True):
         s, eff_init = env.reset()
         done = False
         eff_epi_st = np.zeros((int(args.epilen), 1))
@@ -196,6 +196,10 @@ if __name__== '__main__':
         eff_flag = 0
 
         for t in range(int(args.epilen)):
+            
+            if count > int(args.stepnum):
+                break
+            
             epsilon = max(0.01, 0.9 * (1. - count / args.eps_greedy_period))
             q.eval()
             a = q.sample_action(torch.from_numpy(s).float(), epsilon)
@@ -219,7 +223,7 @@ if __name__== '__main__':
                     plt.savefig('./devices/max_struct', format = 'eps')
                     np.save('./np_struct/max_struct.npy',s)
                     np.save('./np_struct/efficiency.npy',np.array(eff_flag))
-                    plt.close()
+                    
 
             if args.train == True:
                 if (memory.size() > int(args.train_start_memory_size)
