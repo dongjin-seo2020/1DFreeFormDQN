@@ -30,13 +30,12 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
             w = csv.writer(f)
             #w.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
             #w.writerow(data)
-            w.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
+            w.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
   
     else:
         output = csv.writer(open(loggername+'.csv', 'w', newline=''))
-        output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
-        output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent])
-  
+    	output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]', 'count]')
+    	output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
     
 
 def write_json_hyperparameter(path_logs_tb, args):
