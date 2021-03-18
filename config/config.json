@@ -11,10 +11,9 @@
     "epilen": 128,
     "epinum": 40000,
     "printint": 50,
-    "eps_greedy_period": 100000,
+    "eps_greedy_period": 1E+6,
     "train_start_memory_size": 5000,
     "train_num": 1,
     "train_step": 2,
-    "merge_step": 20000,
-    "optimizer": "Adam"
+    "merge_step": 20000
 }
