@@ -1,4 +1,5 @@
-from deflector_reticolo import CustomEnv
+#from deflector_reticolo import CustomEnv
+from deflector_S4 import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -10,6 +11,7 @@ import os
 import json
 import datetime
 import logging
+import shutil
 
 import matplotlib
 matplotlib.use('Agg')
@@ -23,20 +25,6 @@ from torch.utils.tensorboard import SummaryWriter
 
 if __name__== '__main__':
     
-    os.makedirs('config', exist_ok=True)
-    os.makedirs('devices', exist_ok=True)
-    os.makedirs('np_struct', exist_ok=True)
-    os.makedirs('model', exist_ok=True)
-    os.makedirs('summary', exist_ok=True)
-    os.makedirs('logs', exist_ok=True)
-    
-    path_json = './config/config.json'
-    path_devices = './devices/epi{}.png'
-    path_np_struct = './np_struct/epi{}.npy'
-    path_model = './model/'
-    path_summary = './summary/'
-    path_logs = './logs/'
-
     parser = argparse.ArgumentParser()
 
     #parameters setup; 
@@ -107,7 +95,19 @@ if __name__== '__main__':
 
     parser.add_argument('--save_optimum', default=True, help='decide whether to save the optimal structure or not')
 
+    parser.add_argument('--tag', default='', help='folder tag name for experiments')
+    
     args = parser.parse_args()
+
+    path_json = './config/config.json'
+    path_devices = '/devices/epi{}.png'
+    path_devices_max = '/devices/'
+    path_np_struct = '/np_struct/epi{}.npy'
+    path_np_struct_max = '/np_struct/'
+    path_model = '/model/'
+    path_summary = '/summary/'
+    path_logs = '/logs/'
+
 
     if args.load_config==True:
         
@@ -121,26 +121,38 @@ if __name__== '__main__':
 		        setattr(args, k, float(data[k]))
         #for k, v in args.__dict__()
 
+    t = datetime.datetime.now()
+    timeFolderName = t.strftime("%Y_%m_%d_%H_%M_%S")+"/wl"+str(args.wl)+\
+            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))
+    
+    filepath = 'experiments/'+args.network+'/'+args.tag+'/'+timeFolderName
+    
+
+    print('File location folder is: %s' %filepath)
+
+    os.makedirs(filepath+'/devices', exist_ok=True)
+    os.makedirs(filepath+'/np_struct', exist_ok=True)
+    os.makedirs(filepath+'/model', exist_ok=True)
+    os.makedirs(filepath+'/summary', exist_ok=True)
+    os.makedirs(filepath+'/logs', exist_ok=True)
+    
+
     if args.tb==True:
-        t = datetime.datetime.now()
         
-        summaryWriterName = t.strftime("%Y_%m_%d_%H_%M_%S")+"_wl"+str(args.wl)+\
-            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))+args.network
-        print('summaryWritername is: %s' %summaryWriterName)
-        writer = SummaryWriter(path_logs+summaryWriterName)
+        writer = SummaryWriter(filepath+path_logs)
     
     ##### setting up the environment
     # Reticolo
-    env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    #env = CustomEnv(int(args.ncells), args.wl, args.ang)
     # S4
-    #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+    env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
     
 
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
         q_target = network.Qnet(int(args.ncells))
         if args.load_weight==True:
-
+            weight_loc = input('write down the location of the weight file. ex) "./experiments/DQN/[time]/[condition]/model/~"')
             #TODO
             pass
         q_target.load_state_dict(q.state_dict())
@@ -182,10 +194,24 @@ if __name__== '__main__':
     count = 0
     
     #logger handler
-    loggername = path_logs+summaryWriterName+'_logs'
+    loggername = filepath+path_logs+'log'
     lgr = logging.getLogger(loggername)
     sh = logging.StreamHandler()
     lgr.addHandler(sh)
+
+    if args.source_code_save == True:
+        
+        ### TODO code file copy to 'logs' folder
+        shutil.copy(os.getcwd()+'/main.py',filepath+path_logs+'main.py')
+        shutil.copy(os.getcwd()+'/logger.py',filepath+path_logs+'logger.py')
+        shutil.copy(os.getcwd()+'/network.py',filepath+path_logs+'network.py')
+        shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
+        #shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
+        shutil.copy(os.getcwd()+'/replaybuffer.py',filepath+path_logs+'replaybuffer.py')
+
+        
+        
+
 
     while(True):
         s, eff_init = env.reset()
@@ -199,8 +225,14 @@ if __name__== '__main__':
             
             if count > int(args.stepnum):
                 break
+
+            # when training, make the minimum epsilon as 10% for exploration 
+            if args.train==True:
+                epsilon = max(0.1, 0.9 * (1. - count / args.eps_greedy_period))
+            # when exploting, the epsilon becomes 1%
+            else:
+                epsilon = 0.01
             
-            epsilon = max(0.01, 0.9 * (1. - count / args.eps_greedy_period))
             q.eval()
             a = q.sample_action(torch.from_numpy(s).float(), epsilon)
             s_prime, eff_next, r, done = env.step(a)
@@ -219,19 +251,19 @@ if __name__== '__main__':
                     plt.figure(figsize=(20,10))
                     plt.imshow(s.reshape(1,-1), cmap = 'Greys')
                     plt.yticks([])
-                    plt.savefig('./devices/max_struct', format = 'png')
-                    plt.savefig('./devices/max_struct', format = 'eps')
-                    np.save('./np_struct/max_struct.npy',s)
-                    np.save('./np_struct/efficiency.npy',np.array(eff_flag))
+                    plt.savefig(filepath+path_devices_max+'max.png', format = 'png')
+                    plt.savefig(filepath+path_devices_max+'max.eps', format = 'eps')
+                    np.save(filepath+path_np_struct_max+'max_structure.npy', s)
+                    np.save(filepath+path_np_struct_max+'max_efficiency.npy',np.array(eff_flag))
+                    np.save(filepath+path_np_struct_max+'max_stepnumber.npy', np.array(count))
                     plt.close()
 
-            if args.train == True:
-                if (memory.size() > int(args.train_start_memory_size)
-                    and count % int(args.train_step) == 0):
-                    
-                    q.train()
-                    loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
-                        int(args.batch_size), args.gamma, double=double)
+            if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
+                
+                q.train()
+                loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
+                    int(args.batch_size), args.gamma, double=double)
 
                 if count % int(args.merge_step) == 0:
 
@@ -271,31 +303,30 @@ if __name__== '__main__':
             
             logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
                 np.max(eff_epi_st), epi_length, memory.size(), epsilon*100, count)
-            logger.write_json_hyperparameter(path_logs+summaryWriterName, args)
+            logger.write_json_hyperparameter(filepath+path_logs, args)
 
             if args.save_devices == True:
-                logger.deviceplotter(path_devices, s, n_epi)
+                logger.deviceplotter(filepath+path_devices, s, n_epi)
             
             if args.save_np_struct == True: 
-                logger.numpystructplotter(path_np_struct, s, n_epi)
+                logger.numpystructplotter(filepath+path_np_struct, s, n_epi)
 
             if args.checkpoint == True:
-                torch.save(q.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q')
-                torch.save(q_target.state_dict(), path_model+summaryWriterName+'/'+str(count)+'steps_q_target')
-
+                torch.save(q.state_dict(), filepath+path_model+str(count)+'steps_q')
+                torch.save(q_target.state_dict(), filepath+path_model+str(count)+'steps_q_target')
+            else:
+                torch.save(q.state_dict(), filepath+path_model+'q')
+                torch.save(q_target.state_dict(), filepath+path_model+'q_target')
 
         n_epi +=1
 
         
     if args.save_summary == True:
 
-        logger.summaryplotter(q, epi_len_st, s, path_summary)
+        logger.summaryplotter(q, epi_len_st, s, filepath+path_summary)
     
-    if args.source_code_save == True:
-        
-        ### TODO os. file copy to 'code' folder
+    
 
-        pass
     
 
     # TODO : change this part to logger.final_logs()
@@ -316,7 +347,7 @@ if __name__== '__main__':
         for var_name in q_target.state_dict():
             print(var_name, "\t", q_target.state_dict()[var_name])
 
-        torch.save(q.state_dict(), path_model+summaryWriterName+'/'+'final_steps_q')
-        torch.save(q_target.state_dict(), path_model+summaryWriterName+'/'+'final_steps_q_target')
+        torch.save(q.state_dict(), filepath+path_model+'final_steps_q')
+        torch.save(q_target.state_dict(), filepath+path_model+'final_steps_q_target')
 
         env.close()
