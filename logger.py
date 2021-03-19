@@ -7,18 +7,18 @@ import csv
 import os
 
 #write logs and .csv file of hyperparmeters
-def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
+def write_logs(loggername, lgr, sh, n_epi, eff, effmax_episode, effmax_overall, \
             episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
     lgr.info('n_epi: %s, eff: %s, effmax: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
-                n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count)
+                n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count)
 
 
     #csv
     output = csv.writer(open(loggername+'.csv', 'w'))
     output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]', 'count'])
-    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
+    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count])
     #csv
 
     if os.path.isfile(loggername+'.csv'):
@@ -29,12 +29,12 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax, \
             w = csv.writer(f)
             #w.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
             #w.writerow(data)
-            w.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
+            w.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count])
   
     else:
         output = csv.writer(open(loggername+'.csv', 'w', newline=''))
         output.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]', 'count'])
-        output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax, episode_length, n_buffer, epsilon_percent, count])
+        output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count])
     
 
 def write_json_hyperparameter(path_logs_tb, args):
