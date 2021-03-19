@@ -217,14 +217,14 @@ if __name__== '__main__':
         
         
 
-
+    eff_flag = 0
     while(True):
         s, eff_init = env.reset()
         done = False
         eff_epi_st = np.zeros((int(args.epilen), 1))
         epi_length = 0
         average_reward = 0.0
-        eff_flag = 0
+        
 
         for t in range(int(args.epilen)):
             
