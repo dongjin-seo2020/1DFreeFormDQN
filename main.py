@@ -356,3 +356,8 @@ if __name__== '__main__':
         torch.save(q_target.state_dict(), filepath+path_model+'final_steps_q_target')
 
         env.close()
+	
+
+    print('max efficiency: ', eff_flag)
+    print('max stepnumber: ', np.load(filepath+path_np_struct_max+'max_stepnumber.npy'))
+    print('max strucutre: ', np.load(filepath+path_np_struct_max+'max_structure.npy'))
