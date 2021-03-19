@@ -11,7 +11,7 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax_episode, effmax_overall, 
             episode_length, n_buffer, epsilon_percent, count):
     
     # create logger - saving folder: tb folder
-    lgr.info('n_epi: %s, eff: %s, effmax_episode: %s, effmax_overall, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
+    lgr.info('n_epi: %s, eff: %s, effmax_episode: %s, effmax_overall: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
                 n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count)
 
 
