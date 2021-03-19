@@ -131,7 +131,7 @@ if __name__== '__main__':
     filepath = 'experiments/'+args.network+'/'+args.tag+'/'+timeFolderName
     
 
-    print('File location folder is: %s' %filepath)
+    print('\n File location folder is: %s \n' %filepath)
 
     os.makedirs(filepath+'/devices', exist_ok=True)
     os.makedirs(filepath+'/np_struct', exist_ok=True)
