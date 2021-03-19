@@ -29,31 +29,31 @@ if __name__== '__main__':
 
     #parameters setup; 
     #also can be done by changing /config/config.json
-    parser.add_argument('--nG', default=None, help="diffraction order")
-    parser.add_argument('--wl', default=None, help = "wavelength")
-    parser.add_argument('--ang', default=None, help ="angle")
-    parser.add_argument('--lr', default=None, help="learning rate")
-    parser.add_argument('--gamma', default=None, help='discount factor')
-    parser.add_argument('--buf', default=None, help='buffer size')
-    parser.add_argument('--ncells', default=None, help='number of cells')
-    parser.add_argument('--tau', default=None, help='soft update weight')
-    parser.add_argument('--epilen', default=None, help='episode length')
-    parser.add_argument('--stepnum', default=None, help='overall step number')
+    parser.add_argument('--nG', default=None, help="diffraction order", type=int)
+    parser.add_argument('--wl', default=None, help = "wavelength", type=float)
+    parser.add_argument('--ang', default=None, help ="angle", type=float)
+    parser.add_argument('--lr', default=None, help="learning rate", type=float)
+    parser.add_argument('--gamma', default=None, help='discount factor', type=float)
+    parser.add_argument('--buf', default=None, help='buffer size', type=int)
+    parser.add_argument('--ncells', default=None, help='number of cells', type=int)
+    parser.add_argument('--tau', default=None, help='soft update weight', type=float)
+    parser.add_argument('--epilen', default=None, help='episode length', type=int)
+    parser.add_argument('--stepnum', default=None, help='overall step number', type=int)
     parser.add_argument('--printint', default=None, help='interval of \
-                        printing intermediate outputs')
+                        printing intermediate outputs', type=int)
     parser.add_argument('--eps_greedy_period', default=None, \
-                        help='step number period that decreases epsilon')
+                        help='step number period that decreases epsilon', type=int)
 
-    parser.add_argument('--batch_size', default=None)
+    parser.add_argument('--batch_size', default=None, type=int)
     parser.add_argument('--train_start_memory_size', default=None, \
                         help='saved data number in replay buffer that starts\
-                            training')
+                            training', type=int)
     parser.add_argument('--train_num', default=None, help='number of \
-                        training when train_network() is called')
+                        training when train_network() is called', type=int)
     parser.add_argument('--train_step', default=None, help='step period \
-                        when train_network() happens')
+                        when train_network() happens', type=int)
     parser.add_argument('--merge_step', default=None, help='step period \
-                        when the Q network weights are merged to target network')                    
+                        when the Q network weights are merged to target network', type=int)                    
     
     #training or inference
     parser.add_argument('--train', default=True, help="if True, train. \
