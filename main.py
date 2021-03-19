@@ -292,7 +292,7 @@ if __name__== '__main__':
                                 n_epi)
                 writer.add_scalar('episode length / episode', epi_length, n_epi)
                 writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
-                writer.add_scalar('efficency / step', eff_next, count)
+                writer.add_scalar('efficiency / step', eff_next, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
                 if (memory.size() > int(args.train_start_memory_size)
