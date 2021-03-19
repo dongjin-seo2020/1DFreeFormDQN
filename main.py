@@ -233,7 +233,7 @@ if __name__== '__main__':
 
             # when training, make the minimum epsilon as 10% for exploration 
             if args.train==True:
-                epsilon = max(0.1, 0.9 * (1. - count / args.eps_greedy_period))
+                epsilon = max(args.minimum_epsilon, 0.9 * (1. - count / args.eps_greedy_period))
             # when exploting, the epsilon becomes 1%
             else:
                 epsilon = 0.01
