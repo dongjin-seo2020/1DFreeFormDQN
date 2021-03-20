@@ -54,8 +54,8 @@ if __name__== '__main__':
                         when train_network() happens', type=int)
     parser.add_argument('--merge_step', default=None, help='step period \
                         when the Q network weights are merged to target network', type=int)                    
-    parser.add_argument('--miminum_epsilon', default=None, help='minimum amount of epsilon \
-                        during traning', type=int)                    
+    parser.add_argument('--minimum_epsilon', default=None, help='minimum amount of epsilon \
+                        during traning', type=float)                    
     parser.add_argument('--validation_step', default=None, help='step period \
                         when the Q network does not train but infer', type=int)                    
     
