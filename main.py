@@ -117,11 +117,11 @@ if __name__== '__main__':
        
        #assignment of varibles from dict
         for k, v in vars(args).items():
-	        if v is None:
-		        setattr(args, k, float(data[k]))
+            if v is None:
+                setattr(args, k, float(data[k]))
         #for k, v in args.__dict__()
 
-	
+    
         print(vars(args))
 
     t = datetime.datetime.now()
@@ -211,7 +211,7 @@ if __name__== '__main__':
         shutil.copy(os.getcwd()+'/logger.py',filepath+path_logs+'logger.py')
         shutil.copy(os.getcwd()+'/network.py',filepath+path_logs+'network.py')
         shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
-        #shutil.copy(os.getcwd()+'/deflector_.py',filepath+path_logs+'deflector_S4.py')
+        #shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
         shutil.copy(os.getcwd()+'/replaybuffer.py',filepath+path_logs+'replaybuffer.py')
 
         
@@ -292,7 +292,7 @@ if __name__== '__main__':
                                 n_epi)
                 writer.add_scalar('episode length / episode', epi_length, n_epi)
                 writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
-                writer.add_scalar('epsilon[%] / step', epsilon*100. count)
+                writer.add_scalar('epsilon[%] / step', epsilon*100, count)
                 writer.add_scalar('efficiency / step', eff_next, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
@@ -357,7 +357,7 @@ if __name__== '__main__':
         torch.save(q_target.state_dict(), filepath+path_model+'final_steps_q_target')
 
         env.close()
-	
+    
 
     print('max efficiency: ', eff_flag)
     print('max stepnumber: ', np.load(filepath+path_np_struct_max+'max_stepnumber.npy'))
