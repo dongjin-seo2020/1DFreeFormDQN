@@ -16,5 +16,6 @@
     "train_num": 1,
     "train_step": 2,
     "merge_step": 20000,
-    "minimum_epsilon": 0.01
+    "minimum_epsilon": 0.01,
+    "validation_step": 5001
 }
