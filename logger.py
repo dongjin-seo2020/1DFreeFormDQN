@@ -14,21 +14,11 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax_episode, effmax_overall, 
     lgr.info('n_epi: %s, eff: %s, effmax_episode: %s, effmax_overall: %s, episode_length: %s, n_buffer: %s, epsilon_percent:%s, count:%s',\
                 n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count)
 
-
-    #csv
-    output = csv.writer(open(loggername+'.csv', 'w'))
-    output.writerow(['time', 'n_epi', 'eff', 'effmax_epsiode', 'effmax_overall', 'episode_length', 'n_buffer', 'epsilon [%]', 'count'])
-    output.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count])
     #csv
 
     if os.path.isfile(loggername+'.csv'):
-        #with open(loggername+'.csv',newline='') as f:
-         #   r = csv.reader(f)
-          #  data = [line for line in r]
         with open(loggername+'.csv','a',newline='') as f:
             w = csv.writer(f)
-            #w.writerow(['time', 'n_epi', 'eff', 'effmax', 'episode_length', 'n_buffer', 'epsilon [%]'])
-            #w.writerow(data)
             w.writerow([time.strftime('%Y_%m_%d %H:%M:%S'), n_epi, eff, effmax_episode, effmax_overall, episode_length, n_buffer, epsilon_percent, count])
   
     else:
