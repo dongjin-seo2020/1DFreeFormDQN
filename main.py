@@ -57,7 +57,9 @@ if __name__== '__main__':
     parser.add_argument('--minimum_epsilon', default=None, help='minimum amount of epsilon \
                         during traning', type=float)                    
     parser.add_argument('--validation_step', default=None, help='step period \
-                        when the Q network does not train but infer', type=int)                    
+                        when the Q network does not train but infer', type=int)
+    parser.add_argument('--env', default='reticolo', help= 'set environment')
+    psrser.add_argument('--broadband', default=None, help='set broadband input')
     
 
     #training or inference
