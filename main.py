@@ -1,5 +1,3 @@
-from deflector_reticolo import CustomEnv
-#from deflector_S4 import CustomEnv
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -54,17 +52,15 @@ if __name__== '__main__':
                         when train_network() happens', type=int)
     parser.add_argument('--merge_step', default=None, help='step period \
                         when the Q network weights are merged to target network', type=int)                    
-    parser.add_argument('--minimum_epsilon', default=None, help='minimum amount of epsilon \
-                        during traning', type=float)                    
-    parser.add_argument('--validation_step', default=None, help='step period \
-                        when the Q network does not train but infer', type=int)
+    parser.add_argument('--minimum_epsilon', default= None, help='final epsilon value', type=float)
+    parser.add_argument('--validation_epi', default= None, help='validation episode', type=int)
     parser.add_argument('--env', default='reticolo', help= 'set environment')
-    psrser.add_argument('--broadband', default=None, help='set broadband input')
+    parser.add_argument('--broadband', default=False, help='set broadband input')
+    parser.add_argument('--validation', default=False)
     
-
     #training or inference
-    parser.add_argument('--train', default=True, help="if True, train. \
-                        if False, infer only")
+    #parser.add_argument('--train', default=True, help="if True, train. \
+    #                    if False, infer only")
     
     #decide wheter to save model weights or not
     parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
@@ -106,6 +102,12 @@ if __name__== '__main__':
     
     args = parser.parse_args()
 
+
+    if args.env == 'reticolo':
+        from deflector_reticolo import CustomEnv
+    elif  args.env == 'S4':
+        from deflector_S4 import CustomEnv
+    
     path_json = './config/config.json'
     path_devices = '/devices/epi{}.png'
     path_devices_max = '/devices/'
@@ -124,21 +126,23 @@ if __name__== '__main__':
        
        #assignment of varibles from dict
         for k, v in vars(args).items():
-            if v is None:
-                setattr(args, k, float(data[k]))
+	        if v is None:
+		        setattr(args, k, float(data[k]))
         #for k, v in args.__dict__()
 
-    
+	
         print(vars(args))
 
     t = datetime.datetime.now()
-    timeFolderName = "/wl"+str(args.wl)+\
-            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))+t.strftime("%Y_%m_%d_%H_%M_%S")
+    timeFolderName = t.strftime("%Y_%m_%d_%H_%M_%S")+"/wl"+str(args.wl)+\
+            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))
     
     filepath = 'experiments/'+args.network+'/'+args.tag+'/'+timeFolderName
     
 
+   
     print('\n File location folder is: %s \n' %filepath)
+
 
     os.makedirs(filepath+'/devices', exist_ok=True)
     os.makedirs(filepath+'/np_struct', exist_ok=True)
@@ -150,12 +154,12 @@ if __name__== '__main__':
     if args.tb==True:
         
         writer = SummaryWriter(filepath+path_logs)
-    
+        writer_val = SummaryWriter(filepath+path_logs+'val/')
     ##### setting up the environment
-    # Reticolo
-    env = CustomEnv(int(args.ncells), args.wl, args.ang)
-    # S4
-    #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+    if args.env == 'reticolo':
+        env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    elif  args.env == 'S4':
+        env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
     
 
     if args.network=='DQN' or args.network=='Double':
@@ -199,9 +203,7 @@ if __name__== '__main__':
 
 
 
-    epi_len_st= []
-    n_epi =0    
-    count = 0
+    
     
     #logger handler
     loggername = filepath+path_logs+'log'
@@ -217,11 +219,12 @@ if __name__== '__main__':
         shutil.copy(os.getcwd()+'/main.py',filepath+path_logs+'main.py')
         shutil.copy(os.getcwd()+'/logger.py',filepath+path_logs+'logger.py')
         shutil.copy(os.getcwd()+'/network.py',filepath+path_logs+'network.py')
-        shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
-        #shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
+        if args.env == 'reticolo':
+            shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
+        elif  args.env == 'S4':
+            shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
         shutil.copy(os.getcwd()+'/replaybuffer.py',filepath+path_logs+'replaybuffer.py')
 
-        
         
 
     eff_flag = 0
