@@ -288,9 +288,10 @@ if __name__== '__main__':
         if n_epi % int(args.printint) == 0 and n_epi != 0:
 
             if args.tb==True:
-                writer.add_scalar('one step average reward / episode',
-                                average_reward/epi_length,
-                                n_epi)
+                if epi_length!=0:
+                    writer.add_scalar('one step average reward / episode',
+                                    average_reward/epi_length,
+                                    n_epi)
                 writer.add_scalar('final step efficiency / episode',
                                 eff_next,
                                 n_epi)
