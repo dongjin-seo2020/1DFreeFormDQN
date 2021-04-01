@@ -252,7 +252,6 @@ if __name__== '__main__':
         if count > int(args.stepnum):
             break
       
-        print('validation flag: ', str(validation_flag))
         # one episode (training. no validation)
         if validation_flag == 0:
             for t in range(int(args.epilen)):
@@ -371,17 +370,16 @@ if __name__== '__main__':
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
                     writer.add_scalar('train loss / step', loss, count)
-        q.effdata.append(eff_next)
-        epi_len_st.append(epi_length)
+        
 
         ##TODO: 또 명령어로 들어온 애들 처리
         
         #logging the data: saved in logs+tensorboard folders
         #saved data: hyperparameters(json), logs(csv)
         
-        logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
-            np.max(eff_epi_st), eff_flag, epi_length, memory.size(), epsilon*100, count)
-        logger.write_json_hyperparameter(filepath+path_logs, args)
+            logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
+                np.max(eff_epi_st), eff_flag, epi_length, memory.size(), epsilon*100, count)
+            logger.write_json_hyperparameter(filepath+path_logs, args)
 
         if args.save_devices == True:
             logger.deviceplotter(filepath+path_devices, s, n_epi)
