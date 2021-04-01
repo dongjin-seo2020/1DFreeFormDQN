@@ -21,6 +21,9 @@ import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 
 
+import random
+
+
 if __name__== '__main__':
     
     parser = argparse.ArgumentParser()
@@ -227,7 +230,7 @@ if __name__== '__main__':
 
         
     epi_len_st= []
-    n_epi =0    
+    n_epi = 1    
     count = 0
     eff_flag = 0
 
@@ -248,7 +251,8 @@ if __name__== '__main__':
         # termination condition
         if count > int(args.stepnum):
             break
-
+      
+        print('validation flag: ', str(validation_flag))
         # one episode (training. no validation)
         if validation_flag == 0:
             for t in range(int(args.epilen)):
@@ -298,13 +302,13 @@ if __name__== '__main__':
                     break
 
         elif validation_flag == 1:
-            eff_epi_st_val = np.zeros((int(args.val_num),1))
+            eff_epi_st_val = np.zeros((int(args.epilen)))
             epsilon = 0.01 
             x = []
 
             #run episode 10 times
             for i in range(int(args.val_num)):
-                eff_epi_st = np.zeros((int(args.epilen), 1))
+                eff_epi_st = np.zeros((int(args.epilen)))
                 for t in range(int(args.epilen)):
             
                     q.eval()
@@ -317,24 +321,26 @@ if __name__== '__main__':
 
                     epi_length = t+1
                     count += 1
-                    x.append(t)
                     
                     #TODO
-            
-                eff_epi_st_val = np.append(eff_epi_st_val, eff_epi_st.reshape(int(args.epilen),1), axis=1)
-            y = np.mean(eff_epi_st_val, axis = 1)
-            std_ = np.std(eff_epi_st_val, axis=1)
+                #np.reshape(eff_epi_st, (int(args.epilen)))
+                eff_epi_st_val= np.vstack((eff_epi_st_val, eff_epi_st))
+            y = np.mean(eff_epi_st_val, axis = 0)
+            std_ = np.std(eff_epi_st_val, axis=0)
             
             y1 = y + std_
             y2 = y - std_
+            x = np.arange(1, 1+int(args.epilen))
 
-
-            plt.plot(x, y)
-            plt.plot(x, y1)
-            plt.plot(x, y2)
+            plt.figure()
+            plt.plot(x, y, 'k')
+            #plt.plot(x, y1)
+            #plt.plot(x, y2)
             plt.fill_between(x, y, y1, color='lightgray', alpha=0.5)
             plt.fill_between(x, y, y2, color='lightgray', alpha=0.5)
-
+            plt.savefig(filepath+path_logs+str(n_epi)+'.png', format = 'png')
+            print('figure saved')
+            
                 
 
 
@@ -342,29 +348,29 @@ if __name__== '__main__':
 
 
 
-    if n_epi % int(args.printint) == 0 and n_epi != 0:
+        if n_epi % int(args.printint) == 0 and n_epi != 0:
 
-        if args.tb==True:
-            if epi_length!=0:
-                writer.add_scalar('one step average reward / episode',
+            if args.tb==True:
+                if epi_length!=0:
+                    writer.add_scalar('one step average reward / episode',
                                 average_reward/epi_length,
                                 n_epi)
 
-            writer.add_scalar('final step efficiency / episode',
-                            eff_next,
-                            n_epi)
-            writer.add_scalar('episode length / episode',
-                            epi_length,
-                            n_epi)
-            writer.add_scalar('episode length / episode', epi_length, n_epi)
-            writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
-            writer.add_scalar('epsilon[%] / step', epsilon*100, count)
-            writer.add_scalar('efficiency / step', eff_next, count)
-            writer.add_scalar('max efficiency / step', eff_flag, count)
-            writer.add_scalar('memory size / step', memory.size(), count)
-            if (memory.size() > int(args.train_start_memory_size)
-            and count % int(args.train_step) == 0):
-                writer.add_scalar('train loss / step', loss, count)
+                writer.add_scalar('final step efficiency / episode',
+                                eff_next,
+                                n_epi)
+                writer.add_scalar('episode length / episode',
+                                epi_length,
+                                n_epi)
+                writer.add_scalar('episode length / episode', epi_length, n_epi)
+                writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
+                writer.add_scalar('epsilon[%] / step', epsilon*100, count)
+                writer.add_scalar('efficiency / step', eff_next, count)
+                writer.add_scalar('max efficiency / step', eff_flag, count)
+                writer.add_scalar('memory size / step', memory.size(), count)
+                if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
+                    writer.add_scalar('train loss / step', loss, count)
         q.effdata.append(eff_next)
         epi_len_st.append(epi_length)
 
