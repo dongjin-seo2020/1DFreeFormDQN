@@ -5,7 +5,7 @@
     "lr": 0.001,
     "gamma": 0.99,
     "buf": 1E+6,
-    "batch_size": 32,
+    "batch_size": 512,
     "ncells": 64,
     "tau": 0.1,
     "epilen": 128,
@@ -17,5 +17,6 @@
     "train_step": 2,
     "merge_step": 20000,
     "minimum_epsilon": 0.01,
-    "validation_step": 5001
+    "validation_epi": 100,
+    "val_num": 10
 }
