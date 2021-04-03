@@ -324,7 +324,9 @@ if __name__== '__main__':
             epsilon_ = np.append(epsilon_, epsilon*100)
             max_efficiency = np.append(max_efficiency, eff_flag)
             memory_size = np.append(memory_size, memory.size())
-            train_loss = np.append(train_loss, loss)
+            if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
+                train_loss = np.append(train_loss, loss)
             
            
 
