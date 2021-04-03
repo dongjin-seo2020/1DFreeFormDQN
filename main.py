@@ -152,10 +152,21 @@ if __name__== '__main__':
         
         writer = SummaryWriter(filepath+path_logs)
 
+        
+    
+    ##### setting up the environment
+    # Reticolo
+    env = CustomEnv(int(args.ncells), args.wl, args.ang)
+    # S4
+    #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+    
     if args.env == 'reticolo':
         from deflector_reticolo import CustomEnv
+        env = CustomEnv(int(args.ncells), args.wl, args.ang)
+   
     elif  args.env == 'S4':
         from deflector_S4 import CustomEnv
+        env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
 
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
