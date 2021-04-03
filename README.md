@@ -16,3 +16,15 @@ The simulation which corresponds to the environment in RL framework runs on MATL
 ~~~
 python main.py --wavelength=900 --angle=60 --eps_greedy_period=1000000
 ~~~
+
+
+## installment
+If you install it without any version control of environments, type 
+~~~
+pip install requirements.txt
+~~~
+
+or for Anaconda,
+~~~
+conda install requirements.txt
+~~~
