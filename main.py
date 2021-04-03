@@ -154,12 +154,6 @@ if __name__== '__main__':
 
         
     
-    ##### setting up the environment
-    # Reticolo
-    env = CustomEnv(int(args.ncells), args.wl, args.ang)
-    # S4
-    #env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
-    
     if args.env == 'reticolo':
         from deflector_reticolo import CustomEnv
         env = CustomEnv(int(args.ncells), args.wl, args.ang)
