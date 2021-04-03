@@ -237,7 +237,7 @@ if __name__== '__main__':
     episode_length_ = np.array([])
     epsilon_ = np.array([])
     max_efficiency = np.array([])
-    memory_size_step = np.array([])
+    memory_size = np.array([])
     train_loss = np.array([])
     
     
