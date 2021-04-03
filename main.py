@@ -155,8 +155,9 @@ if __name__== '__main__':
 
 
     epi_len_st= []
-    n_epi =0    
+    n_epi =1    # start from 1st episode   
     count = 0
+    eff_flag = 0
     
     #logger handler
     loggername = filepath+path_logs+'log'
@@ -179,7 +180,19 @@ if __name__== '__main__':
         
         
 
-    eff_flag = 0
+    
+    x_step = np.array([])
+    x_episode = np.array([])    
+    one_step_average_reward = np.array([])
+    final_step_efficiency = np.array([])
+    episode_length_ = np.array([])
+    epsilon_ = np.array([])
+    max_efficiency = np.array([])
+    memory_size_step = np.array([])
+    train_loss = np.array([])
+    
+    
+    
     while(True):
         s, eff_init = env.reset()
         done = False
@@ -253,28 +266,48 @@ if __name__== '__main__':
 
         
         if n_epi % int(args.printint) == 0 and n_epi != 0:
+            x_step = np.append(x_step, count)
+            x_episode = np.append(x_episode, n_epi)
+            if epi_length!=0:
+                one_step_average_reward = np.append(one_step_average_reward, average_reward/epi_length)
+            final_step_efficiency = np.append(final_step_efficiency, eff_next)
+            episode_length_ = np.append(episode_length_, epi_length)
+            epsilon_ = np.append(epsilon_, epsilon*100)
+            max_efficiency = np.append(max_efficiency, eff_flag)
+            memory_size = np.append(memory_size, memory.size())
+            train_loss = np.append(train_loss, loss)
+            
+           
+
 
             if args.tb==True:
-                writer.add_scalar('one step average reward / episode',
+                if epi_length!=0:
+                    writer.add_scalar('one step average reward / episode',
                                 average_reward/epi_length,
                                 n_epi)
+
                 writer.add_scalar('final step efficiency / episode',
                                 eff_next,
                                 n_epi)
+                writer.add_scalar('final step efficiency / step',
+                                eff_next,
+                                count)
                 writer.add_scalar('episode length / episode',
                                 epi_length,
                                 n_epi)
-                writer.add_scalar('episode length / episode', epi_length, n_epi)
+                writer.add_scalar('episode length / step', epi_length, count)
                 writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
                 writer.add_scalar('epsilon[%] / step', epsilon*100, count)
-                writer.add_scalar('efficiency / step', eff_next, count)
+                writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
+                    writer.add_scalar('train loss / episode', loss, n_epi)
                     writer.add_scalar('train loss / step', loss, count)
-            q.effdata.append(eff_next)
-            epi_len_st.append(epi_length)
+
+
+
 
             ##TODO: 또 명령어로 들어온 애들 처리
             
@@ -307,7 +340,14 @@ if __name__== '__main__':
     
     
 
-    
+    np.save(path_logs+'x_step.npy', x_step)
+    np.save(path_logs+'x_episode.npy', x_episode)
+    np.save(path_logs+'one_step_average_reward.npy', one_step_average_reward)
+    np.save(path_logs+'final_step_efficiency.npy', final_step_efficiency)
+    np.save(path_logs+'epsilon_.npy', epsilon_)
+    np.save(path_logs+'max_efficiency.npy', max_efficiency)
+    np.save(path_logs+'memory_size.npy', memory_size)
+    np.save(path_logs+'train_loss.npy', train_loss)
 
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
