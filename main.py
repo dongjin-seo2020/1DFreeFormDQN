@@ -107,6 +107,50 @@ if __name__== '__main__':
     
     args = parser.parse_args()
 
+    path_json = './config/config.json'
+    path_devices = '/devices/epi{}.png'
+    path_devices_max = '/devices/'
+    path_np_struct = '/np_struct/epi{}.npy'
+    path_np_struct_max = '/np_struct/'
+    path_model = '/model/'
+    path_summary = '/summary/'
+    path_logs = '/logs/'
+
+
+    if args.load_config==True:
+        
+        #bring parameters from json file
+        with open(path_json) as f:
+            data = json.load(f)  #dict file generated
+       
+       #assignment of varibles from dict
+        for k, v in vars(args).items():
+            if v is None:
+                setattr(args, k, float(data[k]))
+        #for k, v in args.__dict__()
+
+    
+        print(vars(args))
+
+    t = datetime.datetime.now()
+    timeFolderName = t.strftime("%Y_%m_%d_%H_%M_%S")+"/wl"+str(args.wl)+\
+            "_angle"+str(args.ang)+"_ncells"+str(int(args.ncells))
+    
+    filepath = 'experiments/'+args.network+'/'+args.tag+'/'+timeFolderName
+    
+
+    print('\n File location folder is: %s \n' %filepath)
+
+    os.makedirs(filepath+'/devices', exist_ok=True)
+    os.makedirs(filepath+'/np_struct', exist_ok=True)
+    os.makedirs(filepath+'/model', exist_ok=True)
+    os.makedirs(filepath+'/summary', exist_ok=True)
+    os.makedirs(filepath+'/logs', exist_ok=True)
+    
+
+    if args.tb==True:
+        
+        writer = SummaryWriter(filepath+path_logs)
 
     if args.env == 'reticolo':
         from deflector_reticolo import CustomEnv
