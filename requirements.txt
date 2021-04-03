@@ -1,5 +1,5 @@
 torch==1.7.1
-tensorflow== ####
-pandas==1.1.5
-gym==0.15.7
+tensorboard == 1.15.0
+gym==0.18.0
 numpy==1.19.2
+matplotlib == 3.4.1
