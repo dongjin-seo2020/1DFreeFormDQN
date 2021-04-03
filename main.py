@@ -326,7 +326,9 @@ if __name__== '__main__':
             memory_size = np.append(memory_size, memory.size())
             if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
-                train_loss = np.append(train_loss, loss)
+                loss_numpy = loss.detach().numpy()
+                train_loss = np.append(train_loss, loss_numpy)
+
             
            
 
