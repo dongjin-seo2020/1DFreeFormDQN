@@ -18,7 +18,7 @@ python main.py --wavelength=900 --angle=60 --eps_greedy_period=1000000
 ~~~
 
 
-## installment
+## installation
 If you install it without any version control of environments, type 
 ~~~
 pip install requirements.txt
