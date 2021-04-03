@@ -64,8 +64,8 @@ if __name__== '__main__':
     parser.add_argument('--val_num', default=None, help = 'number of validation')
     
     #training or inference
-    #parser.add_argument('--train', default=True, help="if True, train. \
-    #                    if False, infer only")
+    parser.add_argument('--train', default=True, help="if True, train. \
+                        if False, infer only")
     
     #decide wheter to save model weights or not
     parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
