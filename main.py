@@ -348,37 +348,7 @@ if __name__== '__main__':
                 loss_numpy = loss.detach().numpy()
                 train_loss = np.append(train_loss, loss_numpy)
 
-            
-           
-
-
-            if args.tb==True:
-                if epi_length!=0:
-                    writer.add_scalar('one step average reward / episode',
-                                average_reward/epi_length,
-                                n_epi)
-
-                writer.add_scalar('final step efficiency / episode',
-                                eff_next,
-                                n_epi)
-                writer.add_scalar('final step efficiency / step',
-                                eff_next,
-                                count)
-                writer.add_scalar('episode length / episode',
-                                epi_length,
-                                n_epi)
-                writer.add_scalar('episode length / step', epi_length, count)
-                writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
-                writer.add_scalar('epsilon[%] / step', epsilon*100, count)
-                writer.add_scalar('max efficiency / episode', eff_flag, count)
-                writer.add_scalar('max efficiency / step', eff_flag, count)
-                writer.add_scalar('memory size / step', memory.size(), count)
-                if (memory.size() > int(args.train_start_memory_size)
-                and count % int(args.train_step) == 0):
-                    writer.add_scalar('train loss / episode', loss, n_epi)
-                    writer.add_scalar('train loss / step', loss, count)
-
-            
+   
 	    
 	
             x_step = np.append(x_step, count)
