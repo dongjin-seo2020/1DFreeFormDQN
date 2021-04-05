@@ -1,6 +1,7 @@
 # 1DFreeFormDQN
 Design code of 1D free-from deflector metasurface
 
+![alt text](https://github.com/dongjin-seo2020/1DFreeFormDQN/blob/main/images/스크린샷 2021-04-06 오전 12.27.36.pngraw=true)
 
 
 ## target condition
