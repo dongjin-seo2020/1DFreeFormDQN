@@ -8,8 +8,7 @@ Design code of 1D free-from deflector metasurface
 multiple angles / wavelengths learned by a single network
 
 The performance was checked for: wavelength of 900nm, 1000nm, 1100nm / deflection angle of 50°, 60°, 70°. Please refer to the paper(link) for further information.
-
-FC: learns the correlation of inputs and infers the maximum Q action (stabilized by Q network & Target Q network) 
+ 
 
 ## algorithm
 
