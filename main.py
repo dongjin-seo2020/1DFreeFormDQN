@@ -1,3 +1,4 @@
+
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -63,8 +64,8 @@ if __name__== '__main__':
     parser.add_argument('--val_num', default=None, help = 'number of validation')
     
     #training or inference
-    #parser.add_argument('--train', default=True, help="if True, train. \
-    #                    if False, infer only")
+    parser.add_argument('--train', default=True, help="if True, train. \
+                        if False, infer only")
     
     #decide wheter to save model weights or not
     parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
@@ -106,12 +107,6 @@ if __name__== '__main__':
     
     args = parser.parse_args()
 
-
-    if args.env == 'reticolo':
-        from deflector_reticolo import CustomEnv
-    elif  args.env == 'S4':
-        from deflector_S4 import CustomEnv
-    
     path_json = './config/config.json'
     path_devices = '/devices/epi{}.png'
     path_devices_max = '/devices/'
@@ -130,11 +125,11 @@ if __name__== '__main__':
        
        #assignment of varibles from dict
         for k, v in vars(args).items():
-	        if v is None:
-		        setattr(args, k, float(data[k]))
+            if v is None:
+                setattr(args, k, float(data[k]))
         #for k, v in args.__dict__()
 
-	
+    
         print(vars(args))
 
     t = datetime.datetime.now()
@@ -144,9 +139,7 @@ if __name__== '__main__':
     filepath = 'experiments/'+args.network+'/'+args.tag+'/'+timeFolderName
     
 
-   
     print('\n File location folder is: %s \n' %filepath)
-
 
     os.makedirs(filepath+'/devices', exist_ok=True)
     os.makedirs(filepath+'/np_struct', exist_ok=True)
@@ -158,12 +151,16 @@ if __name__== '__main__':
     if args.tb==True:
         
         writer = SummaryWriter(filepath+path_logs)
-    ##### setting up the environment
-    if args.env == 'reticolo':
-        env = CustomEnv(int(args.ncells), args.wl, args.ang)
-    elif  args.env == 'S4':
-        env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+
+        
     
+    if args.env == 'reticolo':
+        from deflector_reticolo import CustomEnv
+        env = CustomEnv(int(args.ncells), args.wl, args.ang)
+   
+    elif  args.env == 'S4':
+        from deflector_S4 import CustomEnv
+        env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
 
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
@@ -206,7 +203,10 @@ if __name__== '__main__':
 
 
 
-    
+    epi_len_st= []
+    n_epi =1    # start from 1st episode   
+    count = 0
+    eff_flag = 0
     
     #logger handler
     loggername = filepath+path_logs+'log'
@@ -222,177 +222,198 @@ if __name__== '__main__':
         shutil.copy(os.getcwd()+'/main.py',filepath+path_logs+'main.py')
         shutil.copy(os.getcwd()+'/logger.py',filepath+path_logs+'logger.py')
         shutil.copy(os.getcwd()+'/network.py',filepath+path_logs+'network.py')
-        if args.env == 'reticolo':
-            shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
-        elif  args.env == 'S4':
-            shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
+        shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
+        #shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
         shutil.copy(os.getcwd()+'/replaybuffer.py',filepath+path_logs+'replaybuffer.py')
 
         
-    epi_len_st= []
-    n_epi = 1    
-    count = 0
-    eff_flag = 0
+        
 
-    #episodes
+    
+    x_step = np.array([])
+    x_episode = np.array([])    
+    one_step_average_reward = np.array([])
+    final_step_efficiency = np.array([])
+    episode_length_ = np.array([])
+    epsilon_ = np.array([])
+    max_efficiency = np.array([])
+    memory_size = np.array([])
+    train_loss = np.array([])
+    eff_val_mean_np = np.array([])
+    
+    
+    
     while(True):
         s, eff_init = env.reset()
         done = False
         eff_epi_st = np.zeros((int(args.epilen), 1))
         epi_length = 0
         average_reward = 0.0
-        validation_flag = 0
-
-        if n_epi % args.validation_epi == 0 and n_epi != 0:
-            validation_flag = 1
-        else:
-            validation_flag = 0
-
-        # termination condition
+        
         if count > int(args.stepnum):
             break
-      
-        # one episode (training. no validation)
-        if validation_flag == 0:
-            for t in range(int(args.epilen)):
+        
+        for t in range(int(args.epilen)):
             
-                # when training, make the minimum epsilon as 10% for exploration 
-                
+
+            # when training, make the minimum epsilon as 10% for exploration 
+            if args.train==True:
                 epsilon = max(args.minimum_epsilon, 0.9 * (1. - count / args.eps_greedy_period))
+            # when exploting, the epsilon becomes 1%
+            else:
+                epsilon = 0.01
+            
+            q.eval()
+            a = q.sample_action(torch.from_numpy(s).float(), epsilon)
+            s_prime, eff_next, r, done = env.step(a)
 
-                q.eval()
-                a = q.sample_action(torch.from_numpy(s).float(), epsilon)
-                s_prime, eff_next, r, done = env.step(a)
-                done_mask = 1 - done
-                memory.put((s, a, r, s_prime, done_mask))
-                s = s_prime
-                eff_epi_st[t] = eff_next
-                average_reward += r
 
-                epi_length = t+1
-                count += 1
+            ## outlier analysis
+            #if abs(r) > 3:
+           # 	print('outlier happend at '+str(t)+'!')
+           # 	np.save(filepath+path_np_struct_max+'outlier_before'+str(t)+'.npy', s)
+           # 	np.save(filepath+path_np_struct_max+'outlier_after'+str(t)+'.npy', s_prime)
+            #	np.save(filepath+path_np_struct_max+'outlier_before_eff'+str(t)+'.npy', eff_epi_st[t-1])
+           # 	np.save(filepath+path_np_struct_max+'outlier_after_eff'+str(t)+'.npy', eff_next)
+
+            done_mask = 1 - done
+            memory.put((s, a, r, s_prime, done_mask))
+            s = s_prime
+            eff_epi_st[t] = eff_next
+            average_reward += r
+
+            epi_length = t+1
+            count += 1
+            
+            if args.save_optimum == True: 
+                if eff_next>eff_flag:
+                    eff_flag = eff_next
+                    plt.figure(figsize=(20,10))
+                    plt.imshow(s.reshape(1,-1), cmap = 'Greys')
+                    plt.yticks([])
+                    plt.savefig(filepath+path_devices_max+'max.png', format = 'png')
+                    plt.savefig(filepath+path_devices_max+'max.eps', format = 'eps')
+                    np.save(filepath+path_np_struct_max+'max_structure.npy', s)
+                    np.save(filepath+path_np_struct_max+'max_efficiency.npy',np.array(eff_flag))
+                    np.save(filepath+path_np_struct_max+'max_stepnumber.npy', np.array(count))
+                    plt.close()
+
+            if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
                 
+                q.train()
+                loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
+                    int(args.batch_size), args.gamma, double=double)
 
-                if args.save_optimum == True: 
-                    if eff_next>eff_flag:
-                        eff_flag = eff_next
-                        plt.figure(figsize=(20,10))
-                        plt.imshow(s.reshape(1,-1), cmap = 'Greys')
-                        plt.yticks([])
-                        plt.savefig(filepath+path_devices_max+'max.png', format = 'png')
-                        plt.savefig(filepath+path_devices_max+'max.eps', format = 'eps')
-                        np.save(filepath+path_np_struct_max+'max_structure.npy', s)
-                        np.save(filepath+path_np_struct_max+'max_efficiency.npy',np.array(eff_flag))
-                        np.save(filepath+path_np_struct_max+'max_stepnumber.npy', np.array(count))
-                        plt.close()
+                if count % int(args.merge_step) == 0:
 
-                if (memory.size() > int(args.train_start_memory_size)
-                    and count % int(args.train_step) == 0):
-                    
-                    q.train()
-                    loss = network.train_network(q, q_target, memory, optimizer, int(args.train_num), \
-                        int(args.batch_size), args.gamma, double=double)
+                    network.merge_network_weights(q_target.named_parameters(),
+                                        q.named_parameters(), args.tau)
+                
+            if done:
+                break
 
-                    if count % int(args.merge_step) == 0:
 
-                        network.merge_network_weights(q_target.named_parameters(),
-                                            q.named_parameters(), args.tau)
-                if done:
-                    break
-
-        elif validation_flag == 1:
-            eff_epi_st_val = np.zeros((int(args.epilen)))
-            epsilon = 0.01 
-            x = []
-
-            #run episode 10 times
+        
+        if n_epi % int(args.printint) == 0 and n_epi != 0:
+		
+	    epsilon = 0.01
+	    eff_epi_st_val = np.zeros((int(args.val_num), 1))
+	    #run episode 10 times
             for i in range(int(args.val_num)):
-                eff_epi_st = np.zeros((int(args.epilen)))
                 for t in range(int(args.epilen)):
             
                     q.eval()
                     a = q.sample_action(torch.from_numpy(s).float(), epsilon)
                     s_prime, eff_next, r, done = env.step(a)
-                    done_mask = 1 - done
                     s = s_prime
-                    eff_epi_st[t] = eff_next
-                    average_reward += r
 
-                    epi_length = t+1
-                    count += 1
-                    
-                    #TODO
-                #np.reshape(eff_epi_st, (int(args.epilen)))
-                eff_epi_st_val= np.vstack((eff_epi_st_val, eff_epi_st))
-            y = np.mean(eff_epi_st_val, axis = 0)
-            std_ = np.std(eff_epi_st_val, axis=0)
+                eff_epi_st_val[i]= eff_next
+            eff_val_mean = np.mean(eff_epi_st_val)
             
-            y1 = y + std_
-            y2 = y - std_
             x = np.arange(1, 1+int(args.epilen))
 
-            plt.figure()
-            plt.plot(x, y, 'k')
-            #plt.plot(x, y1)
-            #plt.plot(x, y2)
-            plt.fill_between(x, y, y1, color='lightgray', alpha=0.5)
-            plt.fill_between(x, y, y2, color='lightgray', alpha=0.5)
-            plt.savefig(filepath+path_logs+str(n_epi)+'.png', format = 'png')
-            print('figure saved')
             
-                
+	    
+	
+            x_step = np.append(x_step, count)
+            x_episode = np.append(x_episode, n_epi)
+            if epi_length!=0:
+                one_step_average_reward = np.append(one_step_average_reward, average_reward/epi_length)
+            final_step_efficiency = np.append(final_step_efficiency, eff_next)
+            episode_length_ = np.append(episode_length_, epi_length)
+            epsilon_ = np.append(epsilon_, epsilon*100)
+            max_efficiency = np.append(max_efficiency, eff_flag)
+            memory_size = np.append(memory_size, memory.size())
+            if (memory.size() > int(args.train_start_memory_size)
+                and count % int(args.train_step) == 0):
+                loss_numpy = loss.detach().numpy()
+                train_loss = np.append(train_loss, loss_numpy)
+	    eff_val_mean_np = np.append(eff_val_mean_np, eff_val_mean)
+		
+		
+		
 
+            
+           
 
-
-
-
-
-        if n_epi % int(args.printint) == 0 and n_epi != 0:
 
             if args.tb==True:
                 if epi_length!=0:
                     writer.add_scalar('one step average reward / episode',
                                 average_reward/epi_length,
                                 n_epi)
+		writer.add_scalar('eff validation mean / episode',
+                                eff_val_mean,
+                                n_epi)
+		writer.add_scalar('eff validation mean / step',
+                                eff_val_mean,
+                                count)
 
                 writer.add_scalar('final step efficiency / episode',
                                 eff_next,
                                 n_epi)
+                writer.add_scalar('final step efficiency / step',
+                                eff_next,
+                                count)
                 writer.add_scalar('episode length / episode',
                                 epi_length,
                                 n_epi)
-                writer.add_scalar('episode length / episode', epi_length, n_epi)
+                writer.add_scalar('episode length / step', epi_length, count)
                 writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
                 writer.add_scalar('epsilon[%] / step', epsilon*100, count)
-                writer.add_scalar('efficiency / step', eff_next, count)
+                writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
+                    writer.add_scalar('train loss / episode', loss, n_epi)
                     writer.add_scalar('train loss / step', loss, count)
-        
 
-        ##TODO: 또 명령어로 들어온 애들 처리
-        
-        #logging the data: saved in logs+tensorboard folders
-        #saved data: hyperparameters(json), logs(csv)
-        
+
+
+
+            ##TODO: 또 명령어로 들어온 애들 처리
+            
+            #logging the data: saved in logs+tensorboard folders
+            #saved data: hyperparameters(json), logs(csv)
+            
             logger.write_logs(loggername, lgr, sh, n_epi, eff_next, \
                 np.max(eff_epi_st), eff_flag, epi_length, memory.size(), epsilon*100, count)
             logger.write_json_hyperparameter(filepath+path_logs, args)
 
-        if args.save_devices == True:
-            logger.deviceplotter(filepath+path_devices, s, n_epi)
-        
-        if args.save_np_struct == True: 
-            logger.numpystructplotter(filepath+path_np_struct, s, n_epi)
+            if args.save_devices == True:
+                logger.deviceplotter(filepath+path_devices, s, n_epi)
+            
+            if args.save_np_struct == True: 
+                logger.numpystructplotter(filepath+path_np_struct, s, n_epi)
 
-        if args.checkpoint == True:
-            torch.save(q.state_dict(), filepath+path_model+str(count)+'steps_q')
-            torch.save(q_target.state_dict(), filepath+path_model+str(count)+'steps_q_target')
-        else:
-            torch.save(q.state_dict(), filepath+path_model+'q')
-            torch.save(q_target.state_dict(), filepath+path_model+'q_target')
+            if args.checkpoint == True:
+                torch.save(q.state_dict(), filepath+path_model+str(count)+'steps_q')
+                torch.save(q_target.state_dict(), filepath+path_model+str(count)+'steps_q_target')
+            else:
+                torch.save(q.state_dict(), filepath+path_model+'q')
+                torch.save(q_target.state_dict(), filepath+path_model+'q_target')
 
         n_epi +=1
 
@@ -403,7 +424,14 @@ if __name__== '__main__':
     
     
 
-    
+    np.save(path_logs+'x_step.npy', x_step)
+    np.save(path_logs+'x_episode.npy', x_episode)
+    np.save(path_logs+'one_step_average_reward.npy', one_step_average_reward)
+    np.save(path_logs+'final_step_efficiency.npy', final_step_efficiency)
+    np.save(path_logs+'epsilon_.npy', epsilon_)
+    np.save(path_logs+'max_efficiency.npy', max_efficiency)
+    np.save(path_logs+'memory_size.npy', memory_size)
+    np.save(path_logs+'train_loss.npy', train_loss)
 
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
@@ -426,8 +454,8 @@ if __name__== '__main__':
         torch.save(q.state_dict(), filepath+path_model+'final_steps_q')
         torch.save(q_target.state_dict(), filepath+path_model+'final_steps_q_target')
 
-        env.close()
-	
+    env.close()
+    
 
     print('max efficiency: ', eff_flag)
     print('max stepnumber: ', np.load(filepath+path_np_struct_max+'max_stepnumber.npy'))
