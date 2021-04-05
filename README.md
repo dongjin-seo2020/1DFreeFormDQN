@@ -2,10 +2,7 @@
 Design code of 1D free-from deflector metasurface
 
 
-![plot](./directory_1/directory_2/.../directory_n/images/스크린샷 2021-04-06 오전 12.27.36.png)
-
-![alt text](https://github.com/dongjin-seo2020/1DFreeFormDQN/blob/main/images/스크린샷 2021-04-06 오전 12.27.36.pngraw=true)
-
+![plot](./images/schematics.png)
 
 ## target condition
 multiple angles / wavelengths learned by a single network
