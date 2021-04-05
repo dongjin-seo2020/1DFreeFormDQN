@@ -1,4 +1,3 @@
-
 import network
 from replaybuffer import ReplayBuffer
 import logger
@@ -273,11 +272,11 @@ if __name__== '__main__':
 
             ## outlier analysis
             #if abs(r) > 3:
-           # 	print('outlier happend at '+str(t)+'!')
-           # 	np.save(filepath+path_np_struct_max+'outlier_before'+str(t)+'.npy', s)
-           # 	np.save(filepath+path_np_struct_max+'outlier_after'+str(t)+'.npy', s_prime)
-            #	np.save(filepath+path_np_struct_max+'outlier_before_eff'+str(t)+'.npy', eff_epi_st[t-1])
-           # 	np.save(filepath+path_np_struct_max+'outlier_after_eff'+str(t)+'.npy', eff_next)
+           #    print('outlier happend at '+str(t)+'!')
+           #    np.save(filepath+path_np_struct_max+'outlier_before'+str(t)+'.npy', s)
+           #    np.save(filepath+path_np_struct_max+'outlier_after'+str(t)+'.npy', s_prime)
+            #   np.save(filepath+path_np_struct_max+'outlier_before_eff'+str(t)+'.npy', eff_epi_st[t-1])
+           #    np.save(filepath+path_np_struct_max+'outlier_after_eff'+str(t)+'.npy', eff_next)
 
             done_mask = 1 - done
             memory.put((s, a, r, s_prime, done_mask))
@@ -319,10 +318,10 @@ if __name__== '__main__':
 
         
         if n_epi % int(args.printint) == 0 and n_epi != 0:
-		
-	    epsilon = 0.01
-	    eff_epi_st_val = np.zeros((int(args.val_num), 1))
-	    #run episode 10 times
+        
+            epsilon = 0.01
+            eff_epi_st_val = np.zeros((int(args.val_num), 1))
+            #run episode 10 times
             for i in range(int(args.val_num)):
                 for t in range(int(args.epilen)):
             
@@ -349,8 +348,8 @@ if __name__== '__main__':
                 train_loss = np.append(train_loss, loss_numpy)
 
    
-	    
-	
+        
+    
             x_step = np.append(x_step, count)
             x_episode = np.append(x_episode, n_epi)
             if epi_length!=0:
@@ -364,10 +363,10 @@ if __name__== '__main__':
                 and count % int(args.train_step) == 0):
                 loss_numpy = loss.detach().numpy()
                 train_loss = np.append(train_loss, loss_numpy)
-	    eff_val_mean_np = np.append(eff_val_mean_np, eff_val_mean)
-		
-		
-		
+            eff_val_mean_np = np.append(eff_val_mean_np, eff_val_mean)
+        
+        
+        
 
             
            
@@ -377,12 +376,12 @@ if __name__== '__main__':
                     writer.add_scalar('one step average reward / episode',
                                 average_reward/epi_length,
                                 n_epi)
-		writer.add_scalar('eff validation mean / episode',
-                                eff_val_mean,
-                                n_epi)
-		writer.add_scalar('eff validation mean / step',
-                                eff_val_mean,
-                                count)
+                writer.add_scalar('eff validation mean / episode',
+                                        eff_val_mean,
+                                        n_epi)
+                writer.add_scalar('eff validation mean / step',
+                                        eff_val_mean,
+                                        count)
 
                 writer.add_scalar('final step efficiency / episode',
                                 eff_next,
