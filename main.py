@@ -319,14 +319,14 @@ if __name__== '__main__':
         
         if n_epi % int(args.printint) == 0 and n_epi != 0:
         
-            epsilon = 0.01
+            epsilon_val = 0.01
             eff_epi_st_val = np.zeros((int(args.val_num), 1))
             #run episode 10 times
             for i in range(int(args.val_num)):
                 for t in range(int(args.epilen)):
             
                     q.eval()
-                    a = q.sample_action(torch.from_numpy(s).float(), epsilon)
+                    a = q.sample_action(torch.from_numpy(s).float(), epsilon_val)
                     s_prime, eff_next, r, done = env.step(a)
                     s = s_prime
 
