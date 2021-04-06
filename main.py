@@ -437,15 +437,15 @@ if __name__== '__main__':
     
     
 
-    np.save(path_logs+'x_step.npy', x_step)
-    np.save(path_logs+'x_episode.npy', x_episode)
-    np.save(path_logs+'one_step_average_reward.npy', one_step_average_reward)
-    np.save(path_logs+'final_step_efficiency.npy', final_step_efficiency)
-    np.save(path_logs+'epsilon_.npy', epsilon_)
-    np.save(path_logs+'max_efficiency.npy', max_efficiency)
-    np.save(path_logs+'memory_size.npy', memory_size)
-    np.save(path_logs+'train_loss.npy', train_loss)
-    np.save(path_logs+'eff_val_mean.npy', eff_val_mean_np)
+    np.save(filepath+path_logs+'x_step.npy', x_step)
+    np.save(filepath+path_logs+'x_episode.npy', x_episode)
+    np.save(filepath+path_logs+'one_step_average_reward.npy', one_step_average_reward)
+    np.save(filepath+path_logs+'final_step_efficiency.npy', final_step_efficiency)
+    np.save(filepath+path_logs+'epsilon_.npy', epsilon_)
+    np.save(filepath+path_logs+'max_efficiency.npy', max_efficiency)
+    np.save(filepath+path_logs+'memory_size.npy', memory_size)
+    np.save(filepath+path_logs+'train_loss.npy', train_loss)
+    np.save(filepath+path_logs+'eff_val_mean.npy', eff_val_mean_np)
 
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
