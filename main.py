@@ -56,7 +56,6 @@ if __name__== '__main__':
     parser.add_argument('--merge_step', default=None, help='step period \
                         when the Q network weights are merged to target network', type=int)                    
     parser.add_argument('--minimum_epsilon', default= None, help='final epsilon value', type=float)
-    parser.add_argument('--validation_epi', default= None, help='validation episode', type=int)
     parser.add_argument('--env', default='reticolo', help= 'set environment')
     parser.add_argument('--broadband', default=False, help='set broadband input')
     parser.add_argument('--validation', default=False)
