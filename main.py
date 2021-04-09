@@ -238,6 +238,7 @@ if __name__== '__main__':
     memory_size = np.array([])
     train_loss = np.array([])
     eff_val_mean_np = np.array([])
+    max_val_np = np.array([])
 
     
     
@@ -319,7 +320,9 @@ if __name__== '__main__':
         if n_epi % int(args.printint) == 0 and n_epi != 0:
         
             epsilon_val = 0.01
+            max_eff_val = 0
             eff_epi_st_val = np.zeros((int(args.val_num), 1))
+            max_eff_st_val = np.zeros((int(args.val_num), 1))
             #run episode 10 times
             for i in range(int(args.val_num)):
                 for t in range(int(args.epilen)):
@@ -327,11 +330,15 @@ if __name__== '__main__':
                     q.eval()
                     a = q.sample_action(torch.from_numpy(s).float(), epsilon_val)
                     s_prime, eff_next, r, done = env.step(a)
+                    if eff_next>max_eff_val:
+                        max_eff_val = eff_next
                     s = s_prime
 
                 eff_epi_st_val[i]= eff_next
+                max_eff_st_val[i] = max_eff_val
             eff_val_mean = np.mean(eff_epi_st_val)
-            
+            max_val = np.max(max_eff_st_val)
+
             x_step = np.append(x_step, count)
             x_episode = np.append(x_episode, n_epi)
             if epi_length!=0:
@@ -363,6 +370,7 @@ if __name__== '__main__':
                 loss_numpy = loss.detach().numpy()
                 train_loss = np.append(train_loss, loss_numpy)
             eff_val_mean_np = np.append(eff_val_mean_np, eff_val_mean)
+            max_val_np = np.append(max_val_np, max_val)
         
         
             np.save(filepath+path_logs+'x_step.npy', x_step)
@@ -374,6 +382,7 @@ if __name__== '__main__':
             np.save(filepath+path_logs+'memory_size.npy', memory_size)
             np.save(filepath+path_logs+'train_loss.npy', train_loss)
             np.save(filepath+path_logs+'eff_val_mean.npy', eff_val_mean_np)
+            np.save(filepath+path_logs+'eff_val_max.npy', max_val_np)
 
             
            
@@ -405,10 +414,13 @@ if __name__== '__main__':
                 writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
+                writer.add_scalar('max of validation / episode', max_val, n_epi)
+                writer.add_scalar('max of validation / step', max_val, count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
                     writer.add_scalar('train loss / episode', loss, n_epi)
                     writer.add_scalar('train loss / step', loss, count)
+                
 
 
 
