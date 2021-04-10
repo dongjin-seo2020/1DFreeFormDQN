@@ -465,6 +465,8 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'memory_size.npy', memory_size)
     np.save(filepath+path_logs+'train_loss.npy', train_loss)
     np.save(filepath+path_logs+'eff_val_mean.npy', eff_val_mean_np)
+    np.save(filepath+path_logs+'eff_val_max.npy', max_val_np)
+
 
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
