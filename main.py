@@ -359,8 +359,8 @@ if __name__== '__main__':
                     max_eff_val_zero = eff_next
                 s = s_prime
                 
-           eff_val_zero = eff_next
-           max_val_zero = max_eff_val_zero
+            eff_val_zero = eff_next
+            max_val_zero = max_eff_val_zero
     
             x_step = np.append(x_step, count)
             x_episode = np.append(x_episode, n_epi)
