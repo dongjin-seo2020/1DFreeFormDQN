@@ -320,7 +320,7 @@ if __name__== '__main__':
 
         
         if n_epi % int(args.printint) == 0 and n_epi != 0:
-            s, _ = env.reset()
+
             epsilon_val = 0.01
 
             max_eff_val = 0
@@ -329,6 +329,7 @@ if __name__== '__main__':
             
             #run episode 10 times
             for i in range(int(args.val_num)):
+                s, _ = env.reset()
                 for t in range(int(args.epilen)):
             
                     q.eval()
