@@ -27,8 +27,8 @@ class CustomEnv(gym.Env):
         #efficiency를 리턴받아 result_before에 할당
         result_before = self.eff
         struct_after= self.struct.copy()
-        #if action==self.n_cells:
-        #    done=True
+        if action==self.n_cells:
+            done=True
         if (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
             struct_after[action] = -1
         elif(struct_after[action] == -1):
