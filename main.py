@@ -334,12 +334,12 @@ if __name__== '__main__':
             
                     q.eval()
                     a = q.sample_action(torch.from_numpy(s).float(), epsilon_val)
-                    s_prime, eff_next, r, done = env.step(a)
-                    if eff_next>max_eff_val:
-                        max_eff_val = eff_next
+                    s_prime, eff_next_val, r, done = env.step(a)
+                    if eff_next_val>max_eff_val:
+                        max_eff_val = eff_next_val
                     s = s_prime
 
-                eff_epi_st_val[i]= eff_next
+                eff_epi_st_val[i]= eff_next_val
                 max_eff_st_val[i] = max_eff_val
                 
            
@@ -355,12 +355,12 @@ if __name__== '__main__':
             
                 q.eval()
                 a = q.sample_action(torch.from_numpy(s).float(), epsilon_val_zero)
-                s_prime, eff_next, r, done = env.step(a)
-                if eff_next>max_eff_val_zero:
-                    max_eff_val_zero = eff_next
+                s_prime, eff_next_val_zero, r, done = env.step(a)
+                if eff_next_val_zero>max_eff_val_zero:
+                    max_eff_val_zero = eff_next_val_zero
                 s = s_prime
                 
-            eff_val_zero = eff_next
+            eff_val_zero = eff_next_val_zero
             max_val_zero = max_eff_val_zero
     
             x_step = np.append(x_step, count)
