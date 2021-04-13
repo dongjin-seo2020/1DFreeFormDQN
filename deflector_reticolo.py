@@ -4,14 +4,13 @@ import matplotlib.pyplot as plt
 import matlab.engine
 
 
-
 class CustomEnv(gym.Env):
 
     #initialization
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'C:\Users\user\DongjinSeo\RETICOLO V8\reticolo_allege'));
+        self.eng.addpath(self.eng.genpath(r'RETICOLO_LOCATION'));
         self.eng.addpath(self.eng.genpath('solvers'));
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
@@ -28,9 +27,9 @@ class CustomEnv(gym.Env):
         #efficiency를 리턴받아 result_before에 할당
         result_before = self.eff
         struct_after= self.struct.copy()
-        if action==self.n_cells:
-            done=True
-        elif (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
+        #if action==self.n_cells:
+        #    done=True
+        if (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
             struct_after[action] = -1
         elif(struct_after[action] == -1):
             struct_after[action] = 1
