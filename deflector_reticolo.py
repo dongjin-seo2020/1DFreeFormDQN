@@ -2,7 +2,7 @@ import gym
 import numpy as np
 import matplotlib.pyplot as plt
 import matlab.engine
-frm pathlib import Path
+from pathlib import Path
 import json
 
 
