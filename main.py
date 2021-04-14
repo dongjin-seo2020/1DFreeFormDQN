@@ -242,7 +242,7 @@ if __name__== '__main__':
 
     
     
-    init_time = time.clock()
+    init_time = time.process_time()
     while(True):
         s, eff_init = env.reset()
         done = False
@@ -481,7 +481,7 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
 
 
-    final_time = time.clock()
+    final_time = time.process_time()
     
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
