@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matlab.engine
 form pathlib import Path
-import pickle
+import json
 
 
 class CustomEnv(gym.Env):
@@ -15,10 +15,10 @@ class CustomEnv(gym.Env):
         self.eng.addpath(self.eng.genpath(r'SIM_LOCATION'));
         self.eng.addpath(self.eng.genpath('RETICOLO_LOCATION'));
         os.makedirs('data',exist_ok=True)
-        self.eff_file_path = 'data/eff_table.pkl'
+        self.eff_file_path = 'data/eff_table.json'
         if Path(self.eff_file_path).exists():
             with open(self.eff_file_path, 'rb') as f:
-                self.eff_table = pickle.load(f)
+                self.eff_table = json.load(f)
         else:
             self.eff_table = {}
         self.n_cells = n_cells
@@ -66,7 +66,7 @@ class CustomEnv(gym.Env):
         eff_init = 0
         self.done = False
         with open(self.eff_table_path, 'wb') as f:
-            pickle.dump(self.eff_table, f, pickle.HIGHEST_PROTOCOL)
+            json.dump(self.eff_table, f)
         return self.struct.squeeze(), eff_init
 
     def get_obs(self):
