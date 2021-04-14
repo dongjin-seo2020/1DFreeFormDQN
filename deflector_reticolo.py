@@ -2,6 +2,8 @@ import gym
 import numpy as np
 import matplotlib.pyplot as plt
 import matlab.engine
+form pathlib import Path
+import pickle
 
 
 class CustomEnv(gym.Env):
@@ -10,8 +12,15 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'RETICOLO_LOCATION'));
-        self.eng.addpath(self.eng.genpath('solvers'));
+        self.eng.addpath(self.eng.genpath(r'SIM_LOCATION'));
+        self.eng.addpath(self.eng.genpath('RETICOLO_LOCATION'));
+        os.makedirs('data',exist_ok=True)
+        self.eff_file_path = 'data/eff_table.pkl'
+        if Path(self.eff_file_path).exists():
+            with open(self.eff_file_path, 'rb') as f:
+                self.eff_table = pickle.load(f)
+        else:
+            self.eff_table = {}
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
         self.desired_angle = matlab.double([desired_angle])
@@ -35,10 +44,13 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
-                                         self.desired_angle)
-        #reward = result_after - result_before
-
+        if tuple(struct_after) is in self.eff_table:
+            self.eff = self.eff_table[tuple(struct_after)]
+        else:
+            self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
+                                             self.desired_angle)
+            self.eff_table[tuple(struct)] = self.eff
+       
         reward = (self.eff)**3
         #various reward can be set
         #reward = (result_after)**3.
@@ -53,6 +65,8 @@ class CustomEnv(gym.Env):
         self.struct = np.ones(self.n_cells)
         eff_init = 0
         self.done = False
+        with open(self.eff_table_path, 'wb') as f:
+            pickle.dump(self.eff_table, f, pickle.HIGHEST_PROTOCOL)
         return self.struct.squeeze(), eff_init
 
     def get_obs(self):
