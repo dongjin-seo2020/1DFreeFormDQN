@@ -45,7 +45,7 @@ class CustomEnv(gym.Env):
         else:
             raise ValueError('struct component should be 1 or -1')
         key = tuple(struct_after.to_list())
-        if key is in self.eff_table:
+        if key in self.eff_table:
             self.eff = self.eff_table[key]
         else:
             self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
