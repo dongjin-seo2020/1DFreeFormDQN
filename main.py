@@ -61,9 +61,6 @@ if __name__== '__main__':
     parser.add_argument('--validation', default=False)
     parser.add_argument('--val_num', default=None, help = 'number of validation')
     
-    #training or inference
-    parser.add_argument('--train', default=True, help="if True, train. \
-                        if False, infer only")
     
     #decide wheter to save model weights or not
     parser.add_argument('--save_model', default=True, help='decide wheter to save model weights or not')
@@ -259,12 +256,8 @@ if __name__== '__main__':
             
 
             # when training, make the minimum epsilon as 10% for exploration 
-            ##FIXME
-            if args.train==True:
-                epsilon = max(args.minimum_epsilon, 0.9 * (1. - count / args.eps_greedy_period))
-            # when exploting, the epsilon becomes 1%
-            else:
-                epsilon = 0.01
+            epsilon = max(args.minimum_epsilon, 0.9 * (1. - count / args.eps_greedy_period))
+
 
             
             q.eval()
