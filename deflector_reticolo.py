@@ -12,7 +12,7 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'RETICOLO_LOCATION'));
+        self.eng.addpath(self.eng.genpath(r'C:\Users\Dongjin\RETICOLO V8'));
         self.eng.addpath(self.eng.genpath('solvers'));
         os.makedirs('data',exist_ok=True)
         self.eff_file_path = 'data/eff_table.json'
@@ -44,12 +44,13 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        if tuple(struct_after) is in self.eff_table:
-            self.eff = self.eff_table[tuple(struct_after)]
+        key = tuple(struct_after.to_list())
+        if key is in self.eff_table:
+            self.eff = self.eff_table[key]
         else:
             self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
                                              self.desired_angle)
-            self.eff_table[tuple(struct)] = self.eff
+            self.eff_table[key] = self.eff
        
         reward = (self.eff)**3
         #various reward can be set
