@@ -12,8 +12,8 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'SIM_LOCATION'));
-        self.eng.addpath(self.eng.genpath('RETICOLO_LOCATION'));
+        self.eng.addpath(self.eng.genpath(r'RETICOLO_LOCATION'));
+        self.eng.addpath(self.eng.genpath('solvers'));
         os.makedirs('data',exist_ok=True)
         self.eff_file_path = 'data/eff_table.json'
         if Path(self.eff_file_path).exists():
