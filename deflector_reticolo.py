@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matlab.engine
 from pathlib import Path
 import json
+import os
 
 
 class CustomEnv(gym.Env):
