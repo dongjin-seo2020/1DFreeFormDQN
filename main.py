@@ -238,9 +238,9 @@ if __name__== '__main__':
     memory_size = np.array([])
     train_loss = np.array([])
     eff_val_mean_np = np.array([])
-    max_val_np = np.array([])
+    eff_val_max_np = np.array([])
     eff_val_zero_np = np.array([])
-    max_val_zero_np = np.array([])
+    eff_val_max_zero_np = np.array([])
 
     
     
@@ -339,12 +339,11 @@ if __name__== '__main__':
                         max_eff_val = eff_next_val
                     s = s_prime
 
-                eff_epi_st_val[i]= eff_next_val
                 max_eff_st_val[i] = max_eff_val
                 
            
-            eff_val_mean = np.mean(eff_epi_st_val)
-            max_val = np.max(max_eff_st_val)
+            eff_val_mean = np.mean(max_eff_st_val)
+            eff_val_max = np.max(max_eff_st_val)
             
             # epsilon zero
             epsilon_val_zero = 0
@@ -361,7 +360,7 @@ if __name__== '__main__':
                 s = s_prime
                 
             eff_val_zero = eff_next_val_zero
-            max_val_zero = max_eff_val_zero
+            eff_val_max_zero = max_eff_val_zero
     
             x_step = np.append(x_step, count)
             x_episode = np.append(x_episode, n_epi)
@@ -377,9 +376,9 @@ if __name__== '__main__':
                 loss_numpy = loss.detach().numpy()
                 train_loss = np.append(train_loss, loss_numpy)
             eff_val_mean_np = np.append(eff_val_mean_np, eff_val_mean)
-            max_val_np = np.append(max_val_np, max_val)
+            eff_val_max_np = np.append(eff_val_max_np, eff_val_max)
             eff_val_zero_np = np.append(eff_val_zero_np, eff_val_zero)
-            max_val_zero_np = np.append(max_val_zero_np, max_val_zero)
+            eff_val_max_zero_np = np.append(eff_val_max_zero_np, eff_val_max_zero)
         
         
             np.save(filepath+path_logs+'x_step.npy', x_step)
@@ -391,9 +390,9 @@ if __name__== '__main__':
             np.save(filepath+path_logs+'memory_size.npy', memory_size)
             np.save(filepath+path_logs+'train_loss.npy', train_loss)
             np.save(filepath+path_logs+'eff_val_mean.npy', eff_val_mean_np)
-            np.save(filepath+path_logs+'eff_val_max.npy', max_val_np)
+            np.save(filepath+path_logs+'eff_val_max.npy', eff_val_max_np)
             np.save(filepath+path_logs+'eff_val_zero.npy', eff_val_zero_np)
-            np.save(filepath+path_logs+'max_val_zero.npy', max_val_zero_np)
+            np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
 
             
            
@@ -430,10 +429,10 @@ if __name__== '__main__':
                 writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
-                writer.add_scalar('max of validation / episode', max_val, n_epi)
-                writer.add_scalar('max of validation / step', max_val, count)
-                writer.add_scalar('max of validation zero / episode', max_val_zero, n_epi)
-                writer.add_scalar('max of validation zero / step', max_val_zero, count)
+                writer.add_scalar('max of validation / episode', eff_val_max, n_epi)
+                writer.add_scalar('max of validation / step', eff_val_max, count)
+                writer.add_scalar('max of validation zero / episode', eff_val_max_zero, n_epi)
+                writer.add_scalar('max of validation zero / step', eff_val_max_zero, count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
                     writer.add_scalar('train loss / episode', loss, n_epi)
@@ -483,9 +482,9 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'memory_size.npy', memory_size)
     np.save(filepath+path_logs+'train_loss.npy', train_loss)
     np.save(filepath+path_logs+'eff_val_mean.npy', eff_val_mean_np)
-    np.save(filepath+path_logs+'eff_val_max.npy', max_val_np)
+    np.save(filepath+path_logs+'eff_val_max.npy', eff_val_max_np)
     np.save(filepath+path_logs+'eff_val_zero.npy', eff_val_zero_np)
-    np.save(filepath+path_logs+'max_val_zero.npy', max_val_zero_np)
+    np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
 
 
     # TODO : change this part to logger.final_logs()
