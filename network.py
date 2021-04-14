@@ -15,7 +15,7 @@ class Qnet(nn.Module):
         self.ncells = ncells
         self.fc1 = nn.Linear(ncells, 2*ncells)
         self.fc2 = nn.Linear(2*ncells, 2*ncells)
-        self.fc3 = nn.Linear(2*ncells, ncells+1)
+        self.fc3 = nn.Linear(2*ncells, ncells)
         self.m = nn.LeakyReLU(0.1)
         
         init_params(self)
@@ -32,7 +32,7 @@ class Qnet(nn.Module):
         out = self.forward(obs)
         coin = random.random() #0<coin<1
         if coin < epsilon:
-            return np.random.randint(0, self.ncells+1)
+            return np.random.randint(0, self.ncells)
         else:
            # print(out.argmax().item())
             return out.argmax().item()
@@ -48,7 +48,7 @@ class DuelingQnet(nn.Module):
         self.ncells = ncells
         self.fc1 = nn.Linear(ncells, 2*ncells)
         self.fc2 = nn.Linear(2*ncells, 2*ncells)
-        self.fc_a = nn.Linear(2*ncells, ncells+1)
+        self.fc_a = nn.Linear(2*ncells, ncells)
         self.fc_v = nn.Linear(2*ncells, 1)
         self.m = nn.LeakyReLU(0.1)
         
@@ -69,7 +69,7 @@ class DuelingQnet(nn.Module):
         out = self.forward(obs)
         coin = random.random() #0<coin<1
         if coin < epsilon:
-            return np.random.randint(0, self.ncells+1)
+            return np.random.randint(0, self.ncells)
         else:
            # print(out.argmax().item())
             return out.argmax().item()
