@@ -38,7 +38,7 @@ class CustomEnv(gym.Env):
         struct_after= self.struct.copy()
         if action==self.n_cells:
             done=True
-        if (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
+        elif (struct_after[action] == 1): #1이면 -1로 만들고 -1이면 1으로 만든다
             struct_after[action] = -1
         elif(struct_after[action] == -1):
             struct_after[action] = 1
