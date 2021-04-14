@@ -3,9 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matlab.engine
 from pathlib import Path
-import json
+import _pickle as json
 import os
-
 
 class CustomEnv(gym.Env):
 
@@ -45,7 +44,8 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('struct component should be 1 or -1')
-        key = tuple(struct_after.to_list())
+        key = tuple(struct_after.tolist())
+       # print(key)
         if key in self.eff_table:
             self.eff = self.eff_table[key]
         else:
@@ -67,8 +67,9 @@ class CustomEnv(gym.Env):
         self.struct = np.ones(self.n_cells)
         eff_init = 0
         self.done = False
-        with open(self.eff_file_path, 'wb') as f:
-            json.dump(self.eff_table, f)
+        if self.eff_table:
+	        with open(self.eff_file_path, 'wb') as f:
+	            json.dump(self.eff_table, f)
         return self.struct.squeeze(), eff_init
 
     def get_obs(self):
