@@ -67,7 +67,7 @@ class CustomEnv(gym.Env):
         self.struct = np.ones(self.n_cells)
         eff_init = 0
         self.done = False
-        with open(self.eff_table_path, 'wb') as f:
+        with open(self.eff_file_path, 'wb') as f:
             json.dump(self.eff_table, f)
         return self.struct.squeeze(), eff_init
 
