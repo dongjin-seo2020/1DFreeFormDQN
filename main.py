@@ -1,6 +1,7 @@
 import network
 from replaybuffer import ReplayBuffer
 import logger
+import time
 
 import gym
 import numpy as np
@@ -241,7 +242,7 @@ if __name__== '__main__':
 
     
     
-    
+    init_time = time.clock()
     while(True):
         s, eff_init = env.reset()
         done = False
@@ -480,6 +481,8 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
 
 
+    final_time = time.clock()
+    
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
         print('initial eff: {}'.format(eff_init))
@@ -507,3 +510,4 @@ if __name__== '__main__':
     print('max efficiency: ', eff_flag)
     print('max stepnumber: ', np.load(filepath+path_np_struct_max+'max_stepnumber.npy'))
     print('max strucutre: ', np.load(filepath+path_np_struct_max+'max_structure.npy'))
+    print('CPU time: ', final_time - init_time)
