@@ -487,6 +487,7 @@ if __name__== '__main__':
     final_time = time.process_time()
     
     np.save(filepath+path_logs+'time_elapse.npy', final_time-init_time)
+    writer.add_scalar('time elapse', final_time-init_time)
     
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
