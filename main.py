@@ -434,7 +434,7 @@ if __name__== '__main__':
                 and count % int(args.train_step) == 0):
                     writer.add_scalar('train loss / episode', loss, n_epi)
                     writer.add_scalar('train loss / step', loss, count)
-                
+                 
 
 
 
@@ -485,6 +485,8 @@ if __name__== '__main__':
 
 
     final_time = time.process_time()
+    
+    np.save(filepath+path_logs+'time_elapse.npy', final_time-init_time)
     
     # TODO : change this part to logger.final_logs()
     if args.save_model == True:
