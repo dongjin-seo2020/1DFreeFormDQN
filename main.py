@@ -153,10 +153,12 @@ if __name__== '__main__':
     if args.env == 'reticolo':
         from deflector_reticolo import CustomEnv
         env = CustomEnv(int(args.ncells), args.wl, args.ang)
+        env_val = CustomEnv(int(args.ncells), args.wl, args.ang)
    
     elif  args.env == 'S4':
         from deflector_S4 import CustomEnv
         env = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
+        env_val = CustomEnv(int(args.nG),int(args.ncells), args.wl, args.ang)
 
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
@@ -320,15 +322,16 @@ if __name__== '__main__':
             max_eff_val = 0
             eff_epi_st_val = np.zeros((int(args.val_num), 1))
             max_eff_st_val = np.zeros((int(args.val_num), 1))
+            _, _ = env_val.reset()
             
             #run episode 10 times
             for i in range(int(args.val_num)):
-                s, _ = env.reset()
+                s, _ = env_val.reset()
                 for t in range(int(args.epilen)):
             
                     q.eval()
                     a = q.sample_action(torch.from_numpy(s).float(), epsilon_val)
-                    s_prime, eff_next_val, r, done = env.step(a)
+                    s_prime, eff_next_val, r, done = env_val.step(a)
                     if eff_next_val>max_eff_val:
                         max_eff_val = eff_next_val
                     s = s_prime
@@ -343,12 +346,12 @@ if __name__== '__main__':
             epsilon_val_zero = 0
             max_eff_val_zero = 0
 
-            s, _ = env.reset()
+            s, _ = env_val.reset()
             for t in range(int(args.epilen)):
             
                 q.eval()
                 a = q.sample_action(torch.from_numpy(s).float(), epsilon_val_zero)
-                s_prime, eff_next_val_zero, r, done = env.step(a)
+                s_prime, eff_next_val_zero, r, done = env_val.step(a)
                 if eff_next_val_zero>max_eff_val_zero:
                     max_eff_val_zero = eff_next_val_zero
                 s = s_prime
@@ -505,6 +508,7 @@ if __name__== '__main__':
         torch.save(q_target.state_dict(), filepath+path_model+'final_steps_q_target')
 
     env.close()
+    env_val.close()
     
 
     print('max efficiency: ', eff_flag)
