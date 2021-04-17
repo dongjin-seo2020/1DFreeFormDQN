@@ -15,7 +15,7 @@ class CustomEnv(gym.Env):
         self.eng.addpath(self.eng.genpath(r'C:\Users\Dongjin\RETICOLO V8'));
         self.eng.addpath(self.eng.genpath('solvers'));
         os.makedirs('data',exist_ok=True)
-        self.eff_file_path = 'data/eff_table.json'
+        self.eff_file_path = 'data/'+str(wavelength)+'_'+str(desired_angle)'_eff_table.json'
         if Path(self.eff_file_path).exists():
             with open(self.eff_file_path, 'rb') as f:
                 self.eff_table = json.load(f)
