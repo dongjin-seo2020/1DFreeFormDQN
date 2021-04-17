@@ -241,6 +241,7 @@ if __name__== '__main__':
     eff_val_max_np = np.array([])
     eff_val_zero_np = np.array([])
     eff_val_max_zero_np = np.array([])
+    epi_len_val_zero_np = np.array([])
 
     
     
@@ -345,9 +346,13 @@ if __name__== '__main__':
             # epsilon zero
             epsilon_val_zero = 0
             max_eff_val_zero = 0
+            epi_len_val_zero = 0
 
             s, _ = env_val.reset()
             for t in range(int(args.epilen)):
+                
+                if done:
+                    break
             
                 q.eval()
                 a = q.sample_action(torch.from_numpy(s).float(), epsilon_val_zero)
@@ -355,6 +360,7 @@ if __name__== '__main__':
                 if eff_next_val_zero>max_eff_val_zero:
                     max_eff_val_zero = eff_next_val_zero
                 s = s_prime
+                epi_len_val_zero +=1
                 
             eff_val_zero = eff_next_val_zero
             eff_val_max_zero = max_eff_val_zero
@@ -376,6 +382,7 @@ if __name__== '__main__':
             eff_val_max_np = np.append(eff_val_max_np, eff_val_max)
             eff_val_zero_np = np.append(eff_val_zero_np, eff_val_zero)
             eff_val_max_zero_np = np.append(eff_val_max_zero_np, eff_val_max_zero)
+            epi_len_val_zero_np = np.append(epi_len_val_zero_np, epi_len_val_zero)
         
         
             np.save(filepath+path_logs+'x_step.npy', x_step)
@@ -390,6 +397,7 @@ if __name__== '__main__':
             np.save(filepath+path_logs+'eff_val_max.npy', eff_val_max_np)
             np.save(filepath+path_logs+'eff_val_zero.npy', eff_val_zero_np)
             np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
+            np.save(filepath+path_logs+'epi_len_val_zero.npy', epi_len_val_zero_np)
 
             
            
@@ -430,6 +438,7 @@ if __name__== '__main__':
                 writer.add_scalar('max of validation / step', eff_val_max, count)
                 writer.add_scalar('max of validation zero / episode', eff_val_max_zero, n_epi)
                 writer.add_scalar('max of validation zero / step', eff_val_max_zero, count)
+                writer.add_scalar('episode length val zero / step', epi_len_val_zero, count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
                     writer.add_scalar('train loss / episode', loss, n_epi)
@@ -482,6 +491,7 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'eff_val_max.npy', eff_val_max_np)
     np.save(filepath+path_logs+'eff_val_zero.npy', eff_val_zero_np)
     np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
+    np.save(filepath+path_logs+'epi_len_val_zero.npy', epi_len_val_zero_np)
 
 
     final_time = time.process_time()
