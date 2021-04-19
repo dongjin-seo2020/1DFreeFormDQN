@@ -288,6 +288,8 @@ if __name__== '__main__':
                 
                 
         n_epi+=1
+
+        print('max efficeincy: ', eff_flag)
                 
                  
 
