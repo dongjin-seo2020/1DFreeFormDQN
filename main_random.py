@@ -249,7 +249,7 @@ if __name__== '__main__':
 
             
             #q.eval()
-            a = np.random.randint(0, self.ncells+1)#q.sample_action(torch.from_numpy(s).float(), epsilon)
+            a = np.random.randint(0, int(args.ncells)+1)
             s_prime, eff_next, r, done = env.step(a)
 
             #done_mask = 1 - done
