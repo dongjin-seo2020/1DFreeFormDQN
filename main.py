@@ -325,6 +325,7 @@ if __name__== '__main__':
             max_eff_st_val = np.zeros((int(args.val_num), 1))
             _, _ = env_val.reset()
             
+            
             #run episode 10 times
             for i in range(int(args.val_num)):
                 s, _ = env_val.reset()
@@ -351,8 +352,7 @@ if __name__== '__main__':
             s, _ = env_val.reset()
             for t in range(int(args.epilen)):
                 
-                if done:
-                    break
+                
             
                 q.eval()
                 a = q.sample_action(torch.from_numpy(s).float(), epsilon_val_zero)
@@ -361,6 +361,9 @@ if __name__== '__main__':
                     max_eff_val_zero = eff_next_val_zero
                 s = s_prime
                 epi_len_val_zero +=1
+                
+                if done:
+                    break
                 
             eff_val_zero = eff_next_val_zero
             eff_val_max_zero = max_eff_val_zero
