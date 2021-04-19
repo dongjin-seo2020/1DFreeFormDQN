@@ -15,7 +15,7 @@ class CustomEnv(gym.Env):
         self.eng.addpath(self.eng.genpath(r'RETICOLOLOCATION'));
         self.eng.addpath(self.eng.genpath('solvers'));
         os.makedirs('data',exist_ok=True)
-        self.eff_file_path = 'data/'+str(wavelength)+'_'+str(desired_angle)+'_eff_table.json'
+        self.eff_file_path = 'data/'+str(wavelength)+'_'+str(desired_angle)+'_'+str(n_cells)+'_eff_table.json'
         if Path(self.eff_file_path).exists():
             with open(self.eff_file_path, 'rb') as f:
                 self.eff_table = json.load(f)
@@ -54,7 +54,7 @@ class CustomEnv(gym.Env):
             self.eff_table[key] = self.eff
        
         reward = (self.eff)**3
-        #various reward can be set
+        #various kinds of reward can be set
         #reward = (result_after)**3.
         #reward = result_after - result_before
         #reward = 1-(1-result_after)**3
