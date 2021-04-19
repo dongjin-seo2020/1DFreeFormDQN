@@ -286,6 +286,9 @@ if __name__== '__main__':
                 writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 
+                
+        n_epi+=1
+                
                  
 
 
