@@ -5,8 +5,8 @@ Design code of 1D free-from deflector metasurface
 ![plot](./images/schematics.png)
 
 ## target condition
-To learn the structure-efficiency relation for multiple deflection angles / near-infrared wavelengths 
-each condition is learned by a same network architecture
+To learn the structure-efficiency relation for multiple deflection angles / near-infrared wavelengths. 
+Each condition is learned by a same network architecture, showing the robustness of input condition of the network.
 
 The performance was checked for: wavelength of 900nm, 1000nm, 1100nm / deflection angle of 50°, 60°, 70°. Please refer to the paper(link) for further information.
  
