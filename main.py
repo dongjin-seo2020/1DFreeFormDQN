@@ -343,6 +343,7 @@ if __name__== '__main__':
            
             eff_val_mean = np.mean(max_eff_st_val)
             eff_val_max = np.max(max_eff_st_val)
+            eff_val_std = np.std(max_eff_st_val)
             
             # epsilon zero
             epsilon_val_zero = 0
@@ -432,19 +433,17 @@ if __name__== '__main__':
                                 epi_length,
                                 n_epi)
                 writer.add_scalar('episode length / step', epi_length, count)
-                writer.add_scalar('epsilon[%] / episode', epsilon*100, n_epi)
                 writer.add_scalar('epsilon[%] / step', epsilon*100, count)
                 writer.add_scalar('max efficiency / episode', eff_flag, count)
                 writer.add_scalar('max efficiency / step', eff_flag, count)
                 writer.add_scalar('memory size / step', memory.size(), count)
-                writer.add_scalar('max of validation / episode', eff_val_max, n_epi)
-                writer.add_scalar('max of validation / step', eff_val_max, count)
-                writer.add_scalar('max of validation zero / episode', eff_val_max_zero, n_epi)
+                writer.add_scalar('mean of max validation / step', eff_val_mean, count)
+                writer.add_scalar('std of max validation / step', eff_val_std, count)
+                writer.add_scalar('max of max validation / step', eff_val_max, count)
                 writer.add_scalar('max of validation zero / step', eff_val_max_zero, count)
                 writer.add_scalar('episode length val zero / step', epi_len_val_zero, count)
                 if (memory.size() > int(args.train_start_memory_size)
                 and count % int(args.train_step) == 0):
-                    writer.add_scalar('train loss / episode', loss, n_epi)
                     writer.add_scalar('train loss / step', loss, count)
                  
 
