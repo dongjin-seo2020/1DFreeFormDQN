@@ -3,7 +3,6 @@ Design code of 1D free-from deflector metasurface based on Reinforcement Learnin
 
 
 ![plot](./images/schematics.png)
-*the conition is borrowed from Fan group condition [github link]
 ## target condition
 To learn the structure-efficiency relation for multiple deflection angles / near-infrared wavelengths. 
 Each condition is learned by the same network architecture, showing the robustness of input condition of the network.
