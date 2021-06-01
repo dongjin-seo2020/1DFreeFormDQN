@@ -46,7 +46,7 @@ If you use RETOCOLO as a simulation tool, you will additionally need MATLAB engi
 https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
 
 ## optimized structures
-The optimized structures are saved as .np files in ./structure folder
+The optimized structures are saved as .np files in ./structures folder
 
 ## citation
 If you cite the code, please refer to: [paper link]
