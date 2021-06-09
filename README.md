@@ -2,7 +2,7 @@
 Design code of 1D free-from deflector metasurface based on Reinforcement Learning
 
 
-The codes and structures are provided for the following paper: [Structural Optimization of 1D Freeform Metagrating Deflector via Deep Reinforcement Learning][paper link]
+The codes and structures are provided following the paper: [Structural Optimization of 1D Freeform Metagrating Deflector via Deep Reinforcement Learning][paper link]
 
 
 
