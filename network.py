@@ -34,7 +34,6 @@ class Qnet(nn.Module):
         if coin < epsilon:
             return np.random.randint(0, self.ncells)
         else:
-           # print(out.argmax().item())
             return out.argmax().item()
 
 
@@ -71,7 +70,6 @@ class DuelingQnet(nn.Module):
         if coin < epsilon:
             return np.random.randint(0, self.ncells)
         else:
-           # print(out.argmax().item())
             return out.argmax().item()
 
         
@@ -87,12 +85,6 @@ def init_params(net, val=np.sqrt(2)):
                 
                 
 def merge_network_weights(q_target_state_dict, q_state_dict, tau):
-    '''
-    dicts = {}
-    for k,v in q_target_state_dict.items():
-        dicts[k] = q_target_state_dict[k] * (1-tau) + q_state_dict[k] * tau
-    return dicts
-    '''
     dict_dest = dict(q_target_state_dict)
     for name, param in q_state_dict:
         if name in dict_dest:
@@ -104,8 +96,8 @@ def train_network(q, q_target, memory, optimizer, train_number, batch_size, gamm
 
     for i in range(int(train_number)):
         s, a, r, s_prime, done_mask = memory.sample(batch_size)
-        q_out = q(s)#.to(device)
-        q_a = q_out.gather(1, a)#.to(device)
+        q_out = q(s)
+        q_a = q_out.gather(1, a)
         if double:
             max_a_prime = q(s_prime).argmax(1, keepdim=True)
             with torch.no_grad():
@@ -113,10 +105,8 @@ def train_network(q, q_target, memory, optimizer, train_number, batch_size, gamm
         else:
             with torch.no_grad():
                 max_q_prime = q_target(s_prime).max(1)[0].unsqueeze(1)
-        #print('maxq: ',max_q_prime)
         target = done_mask * (r + gamma * max_q_prime) + (1 - done_mask) * 1 / (1-gamma) * r
         loss = F.smooth_l1_loss(q_a, target)  #huber loss
-        #print('target: ',target.shape, '\nq_a ', q_a,'\nmaxq: ',max_q_prime, '\nloss: ',loss)
 
         optimizer.zero_grad()
         loss.backward()
