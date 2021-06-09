@@ -30,7 +30,6 @@ def write_logs(loggername, lgr, sh, n_epi, eff, effmax_episode, effmax_overall, 
 def write_json_hyperparameter(path_logs_tb, args):
     #write json file of hyperparameters
     with open(path_logs_tb+'/config.json','w') as fp:
-        #print(vars(args))
         json.dump(vars(args),fp)
 
 def final_logs(eff_init, eff_next, q, q_target):
