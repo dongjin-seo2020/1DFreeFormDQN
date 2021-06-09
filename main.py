@@ -69,10 +69,6 @@ if __name__== '__main__':
     #save model as checkpoint in every episode
     parser.add_argument('--checkpoint', default=False, help="if True, save weights of every episode. \
                         if False, write over same file")
-
-    #load the saved weight
-    parser.add_argument('--load_weight', default=False,\
-                                            help="weight reload")
     #load config.json
     parser.add_argument('--load_config', default=True, \
                         help = "whether to use config.json")
@@ -163,10 +159,6 @@ if __name__== '__main__':
     if args.network=='DQN' or args.network=='Double':
         q = network.Qnet(int(args.ncells))
         q_target = network.Qnet(int(args.ncells))
-        if args.load_weight==True:
-            weight_loc = input('write down the location of the weight file. ex) "./experiments/DQN/[time]/[condition]/model/~"')
-            #TODO
-            pass
         q_target.load_state_dict(q.state_dict())
 
     elif args.network =='Dueling':
@@ -184,11 +176,6 @@ if __name__== '__main__':
     #setting up the optimizer
     if args.optimizer == 'Adam':
         optimizer = optim.Adam(q.parameters(), lr=args.lr)
-
-    elif args.optimizer == 'Nadam':
-        # import optim
-    # optim has much more optimizers than torch.optim
-        pass
 
     elif args.optimizer == 'AdamW':
         optimizer = optim.AdamW(q.parameters(), lr=args.lr)
@@ -215,19 +202,13 @@ if __name__== '__main__':
     
 
     if args.source_code_save == True:
-        
-        ### TODO code file copy to 'logs' folder
         shutil.copy(os.getcwd()+'/main.py',filepath+path_logs+'main.py')
         shutil.copy(os.getcwd()+'/logger.py',filepath+path_logs+'logger.py')
         shutil.copy(os.getcwd()+'/network.py',filepath+path_logs+'network.py')
         shutil.copy(os.getcwd()+'/deflector_reticolo.py',filepath+path_logs+'deflector_reticolo.py')
-        #shutil.copy(os.getcwd()+'/deflector_S4.py',filepath+path_logs+'deflector_S4.py')
         shutil.copy(os.getcwd()+'/replaybuffer.py',filepath+path_logs+'replaybuffer.py')
 
-        
-        
-
-    
+    #initialize the saved np arrays    
     x_step = np.array([])
     x_episode = np.array([])    
     one_step_average_reward = np.array([])
@@ -244,9 +225,9 @@ if __name__== '__main__':
     eff_val_max_zero_np = np.array([])
     epi_len_val_zero_np = np.array([])
 
-    
-    
     init_time = time.process_time()
+    
+    #Overall Training Process
     while(True):
         s, eff_init = env.reset()
         done = False
@@ -260,30 +241,16 @@ if __name__== '__main__':
         for t in range(int(args.epilen)):
             
 
-            # when training, make the minimum epsilon as 10% for exploration 
+            # when training, make the minimum epsilon as 1%(can vary by the minimum_epsilon value) for exploration 
             epsilon = max(args.minimum_epsilon, 0.9 * (1. - count / args.eps_greedy_period))
-
-
-            
             q.eval()
             a = q.sample_action(torch.from_numpy(s).float(), epsilon)
             s_prime, eff_next, r, done = env.step(a)
-
-
-            ## outlier analysis
-            #if abs(r) > 3:
-           #    print('outlier happend at '+str(t)+'!')
-           #    np.save(filepath+path_np_struct_max+'outlier_before'+str(t)+'.npy', s)
-           #    np.save(filepath+path_np_struct_max+'outlier_after'+str(t)+'.npy', s_prime)
-            #   np.save(filepath+path_np_struct_max+'outlier_before_eff'+str(t)+'.npy', eff_epi_st[t-1])
-           #    np.save(filepath+path_np_struct_max+'outlier_after_eff'+str(t)+'.npy', eff_next)
-
             done_mask = 1 - done
             memory.put((s, a, r, s_prime, done_mask))
             s = s_prime
             eff_epi_st[t] = eff_next
             average_reward += r
-
             epi_length = t+1
             count += 1
         
@@ -315,33 +282,26 @@ if __name__== '__main__':
             if done:
                 break
 
-
-        
         if n_epi % int(args.printint) == 0 and n_epi != 0:
 
             epsilon_val = 0.01
-
             max_eff_val = 0
             eff_epi_st_val = np.zeros((int(args.val_num), 1))
             max_eff_st_val = np.zeros((int(args.val_num), 1))
             _, _ = env_val.reset()
             
-            
             #run episode 10 times
             for i in range(int(args.val_num)):
                 s, _ = env_val.reset()
                 for t in range(int(args.epilen)):
-            
                     q.eval()
                     a = q.sample_action(torch.from_numpy(s).float(), epsilon_val)
                     s_prime, eff_next_val, r, done = env_val.step(a)
                     if eff_next_val>max_eff_val:
                         max_eff_val = eff_next_val
                     s = s_prime
-
                 max_eff_st_val[i] = max_eff_val
-                
-           
+            
             eff_val_mean = np.mean(max_eff_st_val)
             eff_val_max = np.max(max_eff_st_val)
             eff_val_std = np.std(max_eff_st_val)
@@ -353,9 +313,6 @@ if __name__== '__main__':
 
             s, _ = env_val.reset()
             for t in range(int(args.epilen)):
-                
-                
-            
                 q.eval()
                 a = q.sample_action(torch.from_numpy(s).float(), epsilon_val_zero)
                 s_prime, eff_next_val_zero, r, done = env_val.step(a)
@@ -406,9 +363,6 @@ if __name__== '__main__':
             np.save(filepath+path_logs+'eff_val_max_zero.npy', eff_val_max_zero_np)
             np.save(filepath+path_logs+'epi_len_val_zero.npy', epi_len_val_zero_np)
 
-            
-           
-
             if args.tb==True:
                 if epi_length!=0:
                     writer.add_scalar('one step average reward / episode',
@@ -450,11 +404,6 @@ if __name__== '__main__':
                     writer.add_scalar('train loss / step', loss, count)
                  
 
-
-
-
-            ##TODO: 또 명령어로 들어온 애들 처리
-            
             #logging the data: saved in logs+tensorboard folders
             #saved data: hyperparameters(json), logs(csv)
             
@@ -479,11 +428,8 @@ if __name__== '__main__':
 
         
     if args.save_summary == True:
-
         logger.summaryplotter(q, epi_len_st, s, filepath+path_summary)
     
-    
-
     np.save(filepath+path_logs+'x_step.npy', x_step)
     np.save(filepath+path_logs+'x_episode.npy', x_episode)
     np.save(filepath+path_logs+'one_step_average_reward.npy', one_step_average_reward)
@@ -504,7 +450,6 @@ if __name__== '__main__':
     np.save(filepath+path_logs+'time_elapse.npy', final_time-init_time)
     writer.add_scalar('CPU time elapse', final_time-init_time)
     
-    # TODO : change this part to logger.final_logs()
     if args.save_model == True:
         print('initial eff: {}'.format(eff_init))
         print('final eff: {}'.format(eff_next))
