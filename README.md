@@ -44,11 +44,11 @@ or for Anaconda,
 conda install requirements.txt
 ~~~
 
-If you use RETOCOLO as a simulation tool, you will additionally need MATLAB engine. Please refer to the site below:
+If you use RETOCOLO as a simulation tool, you will additionally need a MATLAB engine. Please refer to the site below:
 https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
 
 ## optimized structures
-The optimized structures are saved as .np files in ./structures folder
+The optimized structures are saved as .np files in ./structures folder.
 
 ## citation
 If you cite the code, please refer to: [paper link]
