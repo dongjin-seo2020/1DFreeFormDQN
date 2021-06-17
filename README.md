@@ -36,12 +36,12 @@ The configuration of default conditions are written in './config/config.json' fi
 ## installation
 If you install it without any version control of environments, type 
 ~~~
-pip install requirements.txt
+pip install -r requirements.txt
 ~~~
 
 or for Anaconda,
 ~~~
-conda install requirements.txt
+conda install -r requirements.txt
 ~~~
 
 If you use RETOCOLO as a simulation tool, you will additionally need a MATLAB engine. Please refer to the site below:
