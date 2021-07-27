@@ -27,7 +27,6 @@ The simulation which corresponds to the environment in RL framework runs on MATL
 
 self.eng.addpath(self.eng.genpath(r'*the path that you downloaded reticolo*'));
 
-.
 
 ## example
 ~~~
