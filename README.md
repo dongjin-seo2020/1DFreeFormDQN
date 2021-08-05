@@ -46,7 +46,7 @@ or for Anaconda,
 conda install -r requirements.txt
 ~~~
 
-If you do not own MATLAB and use RETICOLO as a simulation tool, you will additionally need a MATLAB engine. Please refer to the site below:
+If you do not own MATLAB but use RETICOLO as a simulation tool, you will additionally need a MATLAB engine. Please refer to the site below:
 https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-for-python.html
 
 ## optimized structures
