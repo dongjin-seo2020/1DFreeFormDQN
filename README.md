@@ -1,5 +1,5 @@
 # 1DFreeFormDQN
-Design code of 1D free-from deflector metasurface based on Reinforcement Learning
+Design code of 1D free-from deflector [metasurface](https://en.wikipedia.org/wiki/Electromagnetic_metasurface) based on [Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning)
 
 
 The codes and the optimized structures are provided following the paper named: [Structural Optimization of 1D Freeform Metagrating Deflector via Deep Reinforcement Learning][paper link]
