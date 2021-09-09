@@ -10,7 +10,7 @@ The codes and the optimized structures are provided following the paper named: [
 ![plot](./images/RL.png)
 ## target condition
 ![plot](./images/env.png)
-To learn the structure-efficiency relation for multiple deflection angles / near-infrared wavelengths. 
+The target is to learn the structure-efficiency relation for multiple deflection angles / near-infrared wavelengths. 
 Each condition is learned by the same network architecture, showing the robustness of input condition of the network.
 
 The performance was checked for: wavelength of 900nm, 1000nm, 1100nm / deflection angle of 50°, 60°, 70°. The value can vary following the needs of users. Please refer to the paper[link] for further information.
