@@ -54,4 +54,4 @@ https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-
 The optimized structures are saved as .np files in `./structures` folder.
 
 ## citation
-If you cite the code, please refer to: [paper link]
+If you refer to the code, please cite [paper link]
