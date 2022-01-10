@@ -3,8 +3,7 @@
 ## Design code of 1D free-from deflector [metasurface](https://en.wikipedia.org/wiki/Electromagnetic_metasurface) based on [Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning)
 
 
-The codes and the optimized structures are provided following the paper named [RETURN TO ARTICLES ASAPPREVARTICLENEXT
-Structural Optimization of a One-Dimensional Freeform Metagrating Deflector via Deep Reinforcement Learning](https://pubs.acs.org/doi/abs/10.1021/acsphotonics.1c00839)
+The codes and the optimized structures are provided following the paper named [Structural Optimization of a One-Dimensional Freeform Metagrating Deflector via Deep Reinforcement Learning](https://pubs.acs.org/doi/abs/10.1021/acsphotonics.1c00839)
 
 
 
@@ -55,4 +54,4 @@ https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-
 The optimized structures are saved as .np files in `./structures` folder.
 
 ## citation
-If you refer to the code, please cite (https://pubs.acs.org/doi/abs/10.1021/acsphotonics.1c00839).
+If you refer to the code, please cite [Our paper](https://pubs.acs.org/doi/abs/10.1021/acsphotonics.1c00839). Thank you in advance!:D
