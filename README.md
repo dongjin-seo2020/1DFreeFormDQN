@@ -53,5 +53,8 @@ https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-
 ## optimized structures
 The optimized structures are saved as .np files in `./structures` folder.
 
+## genetic algorithm
+To utilize the genetic algorithm code in `./solvers` folder, you need to install MATLAB add-on named 'global optimization toolbox'. Also, please erase the `img = img/2.0 + 0.5;` part in the code `Eval_Eff_1D.m` to use genetic algorithm, since the output of genetic algorithm is a binary sequence composed of 0 and 1.
+
 ## citation
 If you refer to the code, please cite [our paper](https://pubs.acs.org/doi/abs/10.1021/acsphotonics.1c00839). Thank you in advance!:D
