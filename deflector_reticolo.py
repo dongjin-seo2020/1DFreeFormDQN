@@ -35,14 +35,13 @@ class CustomEnv(gym.Env):
         done = False
         result_before = self.eff
         struct_after= self.struct.copy()
-        if action==self.n_cells:
-            done=True
-        elif (struct_after[action] == 1):
+        
+        if (struct_after[action] == 1):
             struct_after[action] = -1
         elif(struct_after[action] == -1):
             struct_after[action] = 1
         else:
-            raise ValueError('struct component should be 1 or -1')
+            raise ValueError('action number cannot exceed cell number')
         key = tuple(struct_after.tolist())
         
 	if key in self.eff_table:
