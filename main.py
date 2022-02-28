@@ -77,7 +77,7 @@ if __name__== '__main__':
     parser.add_argument('--tb', default=True, help='tensorboard setting, True/False')
 
     #decide wheter to save device images or not
-    parser.add_argument('--save_devices', default=False, help='decide wheter to save device images or not - jpg')
+    parser.add_argument('--save_devices', default=False, help='decide whether to save device images or not - jpg')
 
     #decide wheter to save np structure or not
     parser.add_argument('--save_np_struct', default=False, help='decide wheter to save numpy structure of devices or not')
