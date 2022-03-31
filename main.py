@@ -84,10 +84,10 @@ if __name__== '__main__':
 
     
     #decide wheter to save summary or not
-    parser.add_argument('--save_summary', default=True, help='decide wheter to save model or not')
+    parser.add_argument('--save_summary', default=True, help='decide wheter to save the model or not')
 
     #decide wheter to save source code or not
-    parser.add_argument('--source_code_save', default=True, help='decide wheter to save model or not')
+    parser.add_argument('--source_code_save', default=True, help='decide wheter to save the source code or not')
 
     parser.add_argument('--network', default='DQN', help='decide which network to use: "DQN"(default), "Double"(Double DQN), "Dueling"(Dueling DQN)')
 
