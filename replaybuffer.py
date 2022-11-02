@@ -26,10 +26,10 @@ class ReplayBuffer():
             s_prime_list.append(s_prime)
             done_mask_list.append([done_mask])
 
-        return (torch.tensor(s_lst, dtype=torch.float),
-                torch.tensor(a_lst), torch.tensor(r_lst),
-                torch.tensor(s_prime_list, dtype=torch.float),
-                torch.tensor(done_mask_list))
+        return (torch.tensor(np.array(s_lst), dtype=torch.float),
+                torch.tensor(np.array(a_lst)), torch.tensor(r_lst),
+                torch.tensor(np.array(s_prime_list), dtype=torch.float),
+                torch.tensor(np.array(done_mask_list)))
 
     def size(self):
         return len(self.buffer)
