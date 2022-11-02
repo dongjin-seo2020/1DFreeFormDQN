@@ -12,15 +12,22 @@ class CustomEnv(gym.Env):
     def __init__(self, n_cells, wavelength, desired_angle):
         super(CustomEnv, self).__init__()
         self.eng = matlab.engine.start_matlab()
-        self.eng.addpath(self.eng.genpath(r'RETICOLOLOCATION'));
+        self.eng.addpath(self.eng.genpath(r'RETICOLOLOCATION')); # write down your reticolo folder location here
         self.eng.addpath(self.eng.genpath('solvers'));
         os.makedirs('data',exist_ok=True)
-        self.eff_file_path = 'data/'+str(wavelength)+'_'+str(desired_angle)+'_'+str(n_cells)+'_eff_table.json'
+        
+        ####################################################
+        #saving the structure - eff information may help to boost the process, 
+        # but if there are too many structure saved, it slows down the code.
+        ####################################################
+        '''
+        self.eff_file_path = os.path.join('data',str(wavelength)+'_'+str(desired_angle)+'_'+str(n_cells)+'_eff_table.json')
         if Path(self.eff_file_path).exists():
             with open(self.eff_file_path, 'rb') as f:
                 self.eff_table = json.load(f)
         else:
             self.eff_table = {}
+        '''
         self.n_cells = n_cells
         self.wavelength = matlab.double([wavelength])
         self.desired_angle = matlab.double([desired_angle])
@@ -42,6 +49,12 @@ class CustomEnv(gym.Env):
             struct_after[action] = 1
         else:
             raise ValueError('action number cannot exceed cell number')
+        
+        ####################################################
+        #saving the structure - eff information may help to boost the process, 
+        # but if there are too many structure saved, it slows down the code.
+        ####################################################
+        '''
         key = tuple(struct_after.tolist())
         
         if key in self.eff_table:
@@ -50,7 +63,10 @@ class CustomEnv(gym.Env):
             self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
                                              self.desired_angle)
             self.eff_table[key] = self.eff
-       
+        '''
+        
+        self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
+                                             self.desired_angle)
         reward = (self.eff)**3
         #various kinds of reward can be set
         #reward = (result_after)**3.
