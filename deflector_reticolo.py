@@ -25,7 +25,7 @@ class CustomEnv(gym.Env):
         self.wavelength = matlab.double([wavelength])
         self.desired_angle = matlab.double([desired_angle])
         self.struct = np.ones(self.n_cells)
-        self.eff =0
+        self.eff = 0
 
     def getEffofStructure(self, struct, wavelength, desired_angle):
         effs = self.eng.Eval_Eff_1D(struct, wavelength, desired_angle)
@@ -44,7 +44,7 @@ class CustomEnv(gym.Env):
             raise ValueError('action number cannot exceed cell number')
         key = tuple(struct_after.tolist())
         
-	if key in self.eff_table:
+        if key in self.eff_table:
             self.eff = self.eff_table[key]
         else:
             self.eff = self.getEffofStructure(matlab.double(struct_after.tolist()), self.wavelength,\
@@ -66,8 +66,8 @@ class CustomEnv(gym.Env):
         eff_init = 0
         self.done = False
         if self.eff_table:
-	        with open(self.eff_file_path, 'wb') as f:
-	            json.dump(self.eff_table, f)
+            with open(self.eff_file_path, 'wb') as f:
+                json.dump(self.eff_table, f)
         return self.struct.squeeze(), eff_init
 
     def get_obs(self):
