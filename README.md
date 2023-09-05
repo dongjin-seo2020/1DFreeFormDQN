@@ -55,7 +55,7 @@ The optimized structures are saved as .np files in `./structures` folder.
 
 
 ## results & visualization
-The logs of each experiment will be saved in `./experiment` folder.
+The logs of each experiment will be saved in `./experiments` folder.
 You can use Tensorboard to visualize the results.
 ~~~
 tensorboard --log_dir=experiments
