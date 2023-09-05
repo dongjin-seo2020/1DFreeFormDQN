@@ -53,6 +53,15 @@ https://www.mathworks.com/help/matlab/matlab_external/install-the-matlab-engine-
 ## optimized structures
 The optimized structures are saved as .np files in `./structures` folder.
 
+
+## results & visualization
+The logs of each experiment will be saved in `./experiment` folder.
+You can use Tensorboard to visualize the results.
+~~~
+tensorboard --log_dir=experiments
+~~~
+
+
 ## genetic algorithm
 To utilize the genetic algorithm code in `./solvers` folder, you need to install MATLAB add-on named 'global optimization toolbox'. Also, please erase the `img = img/2.0 + 0.5;` part in the code `Eval_Eff_1D.m` to use genetic algorithm, since the output of genetic algorithm is a binary sequence composed of 0 and 1.
 
